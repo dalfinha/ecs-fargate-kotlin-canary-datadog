@@ -30,3 +30,23 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# IDEs
+.idea/
+*.iml
+
+# Build artifacts
+/build/
+
+# Kotlin specific
+*.kotlin_metadata
+
+# Gradle
+.gradle/
+build/
+
+# OS-specific
+Thumbs.db
+
+# Logs
+*.log
