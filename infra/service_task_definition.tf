@@ -1,8 +1,8 @@
 resource "aws_ecs_task_definition" "this" {
   family                = "family-${local.project_name}"
 
-  task_role_arn           = data.aws_iam_role.arn
-  execution_role_arn      = data.aws_iam_role.arn
+  task_role_arn           = data.aws_iam_role.this.arn
+  execution_role_arn      = data.aws_iam_role.this.arn
   network_mode            = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 
