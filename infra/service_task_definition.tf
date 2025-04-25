@@ -43,12 +43,12 @@ resource "aws_ecs_task_definition" "this" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = "/ecs/${var.service_name}"
+          awslogs-group         = aws_cloudwatch_log_group.this.name
           mode                  = "non-blocking"
           awslogs-create-group  = "true"
           max-buffer-size       = "25m"
           awslogs-region        = "us-east-1"
-          awslogs-stream-prefix = "ecs"
+          awslogs-stream-prefix = "poc"
         }
         secretOptions = []
       }
