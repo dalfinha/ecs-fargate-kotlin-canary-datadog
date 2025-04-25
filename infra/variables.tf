@@ -10,19 +10,16 @@ variable "env_variables" {
 variable "service_name" {
   description = "Nome do Microsserviço ECS"
   type        = string
+  default     = "kotlin-canary-datadog"
 }
 
 variable "ecs_cluster_name" {
   description = "Nome do Cluster ECS"
   type = string
+  default = "ecs-kotlin-canary-datadog"
 }
 
 variable "env" {
   type = string
   default = "dev"
-}
-
-variable "tags" {
-  type    = map(string)
-  default = {}
 }

@@ -4,7 +4,7 @@ data "aws_iam_role" "this" {
 
 data "aws_ecr_image" "this" {
   repository_name = "demo/kotlin-app-canary"
-  most_recent = true
+  most_recent     = true
 }
 
 data "aws_vpc" "this" {

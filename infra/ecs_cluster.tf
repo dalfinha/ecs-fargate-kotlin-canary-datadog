@@ -7,7 +7,4 @@ resource "aws_ecs_cluster" "this" {
     value = var.env == "dev" ? "disabled" : "enabled"
   }
 
-  tags = {
-   projeto = local.project_name
-  }
 }

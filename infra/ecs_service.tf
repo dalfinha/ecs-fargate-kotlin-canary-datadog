@@ -31,5 +31,4 @@ resource "aws_ecs_service" "this" {
     assign_public_ip  = true
   }
 
-  tags = var.tags
 }

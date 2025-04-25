@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name  = "container-${local.project_name}"
-      image = data.aws_ecr_image.this.image_digest
+      image = data.aws_ecr_image.this.image_uri
       cpu   = 0
       portMappings = [
         {
@@ -45,10 +45,9 @@ resource "aws_ecs_task_definition" "this" {
         options = {
           awslogs-group         = aws_cloudwatch_log_group.this.name
           mode                  = "non-blocking"
-          awslogs-create-group  = "true"
           max-buffer-size       = "25m"
           awslogs-region        = "us-east-1"
-          awslogs-stream-prefix = "poc"
+          awslogs-stream-prefix = "ecs"
         }
         secretOptions = []
       }
