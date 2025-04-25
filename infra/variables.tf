@@ -5,7 +5,7 @@ variable "env_variables" {
 }
 
 variable "service_name" {
-  description = "Nome do Microsservico ECS"
+  description = "Nome do Microsserviço ECS"
   type        = string
 }
 
