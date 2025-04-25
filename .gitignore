@@ -50,3 +50,25 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Arquivos de estado do Terraform
+*.tfstate
+*.tfstate.*
+
+# Backup de plano
+*.tfplan
+
+# Diretório de cache do Terraform
+.terraform/
+
+# Arquivos de override
+*.override.tf
+*.override.tf.json
+
+# Logs e outputs locais
+crash.log
+terraform.tfvars
+terraform.tfvars.json
+
+# Lock file
+.terraform.lock.hcl
