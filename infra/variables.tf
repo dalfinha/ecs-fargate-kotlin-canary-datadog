@@ -1,6 +1,9 @@
 variable "env_variables" {
   description = "Variaveis de ambiente para a task definition"
-  type    = list(object({ name = string, value = string }))
+  type = list(object({
+    key   = string
+    value = string
+  }))
   default = []
 }
 

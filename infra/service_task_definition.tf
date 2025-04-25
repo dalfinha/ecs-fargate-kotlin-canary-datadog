@@ -17,7 +17,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name  = "container-${local.project_name}"
-      image = data.aws_ecr_image.this.most_recent
+      image = data.aws_ecr_image.this.image_digest
       cpu   = 0
       portMappings = [
         {
@@ -29,7 +29,12 @@ resource "aws_ecs_task_definition" "this" {
         }
       ]
       essential           = true
-      environment         = [ var.env_variables ]
+      environment         = [
+        for env in var.env_variables : {
+          name  = env.key
+          value = env.value
+        }
+      ]
       environmentFiles    = []
       mountPoints         = []
       volumesFrom         = []
