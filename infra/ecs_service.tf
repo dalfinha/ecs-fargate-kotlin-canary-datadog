@@ -4,7 +4,7 @@ resource "aws_ecs_service" "this" {
   name        = var.service_name
   cluster     = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.this.arn
-  desired_count   = var.env == "dev" ? 1 : 0
+  desired_count   = var.env == "dev" ? 0 : 0
   launch_type     = null
   scheduling_strategy = "REPLICA"
   platform_version    = "LATEST"
