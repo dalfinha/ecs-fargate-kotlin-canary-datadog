@@ -1,5 +1,5 @@
 resource "aws_lb" "this" {
-  depends_on = [aws_lb_target_group.this]
+  depends_on = [aws_lb_target_group.this, aws_ecs_task_definition.this]
   name               = "alb-kotlin-canary"
   internal           = true
   load_balancer_type = "application"

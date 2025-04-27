@@ -1,4 +1,5 @@
 resource "aws_ecs_task_definition" "this" {
+  depends_on = [aws_ecs_cluster.this]
   family                = "family-${local.project_name}"
 
   task_role_arn           = data.aws_iam_role.this.arn

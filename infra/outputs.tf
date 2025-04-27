@@ -3,7 +3,7 @@ output "iam_role" {
 }
 
 output "ultima_imagem_ecr" {
-  value = data.aws_ecr_image.this.image_digest
+  value = data.aws_ecr_image.this.image_uri
 }
 
 output "vpc_id" {
