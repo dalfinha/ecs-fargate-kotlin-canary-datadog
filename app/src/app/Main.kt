@@ -1,6 +1,8 @@
+package app
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import app.startHealthServer
 
 var total = 0
 
@@ -19,4 +21,6 @@ fun main() {
     }
 
     scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS)
+
+    startHealthServer()
 }
