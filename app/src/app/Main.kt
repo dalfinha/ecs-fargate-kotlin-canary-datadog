@@ -19,4 +19,6 @@ fun main() {
     }
 
     scheduler.scheduleAtFixedRate(task, 0, 120, TimeUnit.SECONDS)
+
+    startHealthServer()
 }

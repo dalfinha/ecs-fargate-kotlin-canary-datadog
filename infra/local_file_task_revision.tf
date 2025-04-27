@@ -4,7 +4,7 @@ resource "local_file" "task_def_json" {
 }
 
 
-resource "local_file" "task_def_json" {
+resource "local_file" "app_sec" {
   content = jsonencode({
     family                   = aws_ecs_task_definition.this.family
     taskRoleArn              = aws_ecs_task_definition.this.task_role_arn
