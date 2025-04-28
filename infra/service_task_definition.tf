@@ -23,24 +23,24 @@ resource "aws_ecs_task_definition" "this" {
       portMappings = [
         {
           name          = "container-${local.project_name}-80-tcp"
-          containerPort = 80
-          hostPort      = 80
+          containerPort = 8080
+          hostPort      = 8080
           protocol      = "tcp"
           appProtocol   = "http"
         }
       ]
-      essential           = true
-      environment         = [
+      essential   = true
+      environment = [
         for env in var.env_variables : {
           name  = env.key
           value = env.value
         }
       ]
-      environmentFiles    = []
-      mountPoints         = []
-      volumesFrom         = []
-      ulimits             = []
-      systemControls      = []
+      environmentFiles = []
+      mountPoints = []
+      volumesFrom = []
+      ulimits = []
+      systemControls = []
       logConfiguration = {
         logDriver = "awslogs"
         options = {

@@ -30,7 +30,7 @@ resource "aws_codedeploy_deployment_group" "this" {
     cluster_name = aws_ecs_cluster.this.name
     service_name = aws_ecs_service.this.name
   }
-
+  
   load_balancer_info {
     target_group_pair_info {
       prod_traffic_route {

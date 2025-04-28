@@ -5,7 +5,13 @@ resource "aws_lb_target_group" "this" {
 
   name        = "kotlin-canary-${each.key}"
   target_type = "ip"
-  port        = 80
+  port        = 8080
   protocol    = "HTTP"
   vpc_id      = data.aws_vpc.this.id
+
+  health_check {
+    path        = "/actuator/health"
+    interval    = 120
+  }
+
 }
