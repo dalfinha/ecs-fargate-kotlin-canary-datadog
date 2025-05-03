@@ -1,4 +1,5 @@
 resource "aws_ecs_cluster" "this" {
+  depends_on = [aws_cloudwatch_log_group.this]
   name = var.ecs_cluster_name
 
   setting {

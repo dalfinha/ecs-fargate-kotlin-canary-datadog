@@ -31,9 +31,11 @@ resource "aws_ecs_service" "this" {
     assign_public_ip  = true
   }
 
+
   load_balancer {
     target_group_arn = aws_lb_target_group.this["blue"].arn
     container_name   = "container-${local.project_name}"
     container_port   = 8080
   }
 }
+

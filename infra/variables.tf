@@ -33,3 +33,4 @@ variable "role_iam" {
   type = string
   default = "ecs-tasks-demo"
 }
+
