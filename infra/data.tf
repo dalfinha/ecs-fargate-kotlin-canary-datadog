@@ -1,7 +1,7 @@
 data "aws_region" "current" {}
 
 data "aws_iam_role" "this" {
-  name = "ecs-tasks-demo"
+  name = var.role_iam
 }
 
 data "aws_ecr_image" "this" {
