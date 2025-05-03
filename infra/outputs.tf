@@ -2,7 +2,7 @@ output "iam_role" {
   value = data.aws_iam_role.this.name
 }
 
-output "ultima_imagem_ecr" {
+output "last_image_ecr" {
   value = data.aws_ecr_image.this.image_uri
 }
 

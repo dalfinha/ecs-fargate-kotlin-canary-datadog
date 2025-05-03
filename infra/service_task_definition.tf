@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "this" {
     {
       name  = "container-${local.project_name}"
       image = data.aws_ecr_image.this.image_uri
-      cpu   = 0
+      cpu   = 256
       portMappings = [
         {
           name          = "container-${local.project_name}-80-tcp"
@@ -47,7 +47,7 @@ resource "aws_ecs_task_definition" "this" {
           awslogs-group         = aws_cloudwatch_log_group.this.name
           mode                  = "non-blocking"
           max-buffer-size       = "25m"
-          awslogs-region        = "us-east-1"
+          awslogs-region        = data.aws_region.current.id
           awslogs-stream-prefix = "ecs"
         }
         secretOptions = []

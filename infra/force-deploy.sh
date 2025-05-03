@@ -1,8 +1,28 @@
 #!/bin/env bash
-echo "Iniciando um novo Deployment..."
-sleep 30
-# Forçando um novo deployment
-aws deploy create-deployment --application-name poc-dev-kotlin-canary-datadog --deployment-group-name poc-dev-kotlin-canary-datadog --revision "{\"revisionType\": \"S3\", \"s3Location\": {\"bucket\": \"artefatos-kotlin-canary\", \"key\": \"appspec.yaml\", \"bundleType\": \"yaml\"}}"
 
-# Limpando o arquivo temporário
+echo "Iniciando verificação de status de deployment..."
+
+DEPLOYMENT_ID=$(aws deploy list-deployments --application-name $APPLICATION_NAME --deployment-group-name $DEPLOYMENT_GROUP_NAME --query 'deployments[0]' --output text)
+
+if [ "$DEPLOYMENT_ID" != "None" ]; then
+    STATUS=$(aws deploy get-deployment --deployment-id $DEPLOYMENT_ID --query 'deploymentInfo.status' --output text)
+
+    if [ "$STATUS" == "InProgress" ]; then
+        echo "Já existe um deployment em andamento (ID: $DEPLOYMENT_ID). Um novo deployment não será iniciado."
+        exit 0
+    else
+        echo "Sem deploy em andamento. Iniciando novo deployment..."
+    fi
+else
+    echo "Sem deploy em andamento. Iniciando novo deployment..."
+fi
+
+DEPLOYMENT_ID=$(aws deploy create-deployment \
+  --application-name $APPLICATION_NAME \
+  --deployment-group-name $DEPLOYMENT_GROUP_NAME \
+  --revision "{\"revisionType\": \"S3\", \"s3Location\": {\"bucket\": \"$S3_APPSPEC\", \"key\": \"appspec.yaml\", \"bundleType\": \"yaml\"}}" \
+  --output text --query deploymentId)
+
+echo "ID do deployment: $DEPLOYMENT_ID"
+
 rm -rf ./codedeploy/appspec.yaml

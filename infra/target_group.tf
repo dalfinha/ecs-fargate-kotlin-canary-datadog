@@ -13,5 +13,4 @@ resource "aws_lb_target_group" "this" {
     path        = "/actuator/health"
     interval    = 120
   }
-
 }
