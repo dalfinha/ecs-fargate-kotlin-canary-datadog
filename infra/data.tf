@@ -1,9 +1,11 @@
+data "aws_region" "current" {}
+
 data "aws_iam_role" "this" {
   name = "ecs-tasks-demo"
 }
 
 data "aws_ecr_image" "this" {
-  repository_name = "demo/kotlin-app-canary"
+  repository_name = var.ecr_repository
   most_recent     = true
 }
 

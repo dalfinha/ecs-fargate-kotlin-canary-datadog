@@ -1,14 +1,14 @@
 resource "aws_ecs_service" "this" {
-  depends_on = [aws_ecs_cluster.this, aws_ecs_task_definition.this]
+  depends_on = [aws_ecs_cluster.this, aws_ecs_task_definition.this, aws_lb.this]
 
-  name        = var.service_name
-  cluster     = aws_ecs_cluster.this.id
+  name            = var.service_name
+  cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.this.arn
-  desired_count   = var.env == "dev" ? 1 : 0
+  desired_count   = 1
   launch_type     = null
   scheduling_strategy = "REPLICA"
-  platform_version    = "LATEST"
   enable_ecs_managed_tags = true
+  health_check_grace_period_seconds = 60
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
@@ -17,7 +17,7 @@ resource "aws_ecs_service" "this" {
   }
 
   deployment_controller {
-    type = "ECS"
+    type = "CODE_DEPLOY"
   }
 
   deployment_circuit_breaker {
@@ -31,4 +31,9 @@ resource "aws_ecs_service" "this" {
     assign_public_ip  = true
   }
 
+  load_balancer {
+    target_group_arn = aws_lb_target_group.this["blue"].arn
+    container_name   = "container-${local.project_name}"
+    container_port   = 8080
+  }
 }

@@ -14,5 +14,5 @@ fun startHealthServer() {
     }
     server.executor = null
     server.start()
-    println("Servidor iniciado na porta 80")
+    println("Servidor iniciado na porta 8080")
 }
