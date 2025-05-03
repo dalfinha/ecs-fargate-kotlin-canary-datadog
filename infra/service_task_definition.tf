@@ -1,6 +1,7 @@
 resource "aws_ecs_task_definition" "this" {
-  family                = "family-${local.project_name}"
+  depends_on = [aws_ecs_cluster.this]
 
+  family                = "family-${local.project_name}"
   task_role_arn           = data.aws_iam_role.this.arn
   execution_role_arn      = data.aws_iam_role.this.arn
   network_mode            = "awsvpc"
@@ -18,35 +19,36 @@ resource "aws_ecs_task_definition" "this" {
     {
       name  = "container-${local.project_name}"
       image = data.aws_ecr_image.this.image_uri
-      cpu   = 0
+      cpu   = 256
       portMappings = [
         {
           name          = "container-${local.project_name}-80-tcp"
-          containerPort = 80
-          hostPort      = 80
+          containerPort = 8080
+          hostPort      = 8080
           protocol      = "tcp"
           appProtocol   = "http"
         }
       ]
-      essential           = true
-      environment         = [
+      essential   = true
+      environment = [
+
         for env in var.env_variables : {
           name  = env.key
           value = env.value
         }
       ]
-      environmentFiles    = []
-      mountPoints         = []
-      volumesFrom         = []
-      ulimits             = []
-      systemControls      = []
+      environmentFiles = []
+      mountPoints = []
+      volumesFrom = []
+      ulimits = []
+      systemControls = []
       logConfiguration = {
         logDriver = "awslogs"
         options = {
           awslogs-group         = aws_cloudwatch_log_group.this.name
           mode                  = "non-blocking"
           max-buffer-size       = "25m"
-          awslogs-region        = "us-east-1"
+          awslogs-region        = data.aws_region.current.id
           awslogs-stream-prefix = "ecs"
         }
         secretOptions = []

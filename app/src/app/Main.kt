@@ -18,5 +18,7 @@ fun main() {
         println("É igual a: $total")
     }
 
-    scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS)
+    scheduler.scheduleAtFixedRate(task, 0, 120, TimeUnit.SECONDS)
+
+    startHealthServer()
 }
