@@ -1,13 +1,11 @@
 resource "aws_lb_target_group" "this" {
-  depends_on  = [aws_ecs_cluster.this]
-
   for_each    = toset(["blue","green"])
 
   name        = "canary-${each.key}"
   target_type = "ip"
-  port        = 8080
+  port        = var.port_application
   protocol    = "HTTP"
-  vpc_id      = data.aws_vpc.this.id
+  vpc_id      = var.vpc_id
 
   health_check {
     path        = "/actuator/health"
