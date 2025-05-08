@@ -12,11 +12,10 @@ variable "service_name" {}
 
 variable "arn_listener" {}
 
-variable "listeners_name" {}
+variable "listeners_name" {} #TO-DO: adicionar como lista para acesso ao canary
 
 variable "task_definition_arn" {}
 
 variable "container_name" {}
 
 variable "port_application" {}
-
