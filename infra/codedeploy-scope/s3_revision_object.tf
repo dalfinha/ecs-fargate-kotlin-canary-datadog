@@ -7,6 +7,6 @@ resource "aws_s3_object" "this" {
 
   bucket = aws_s3_bucket.this.bucket
   key    = "appspec.yaml"
-  source = "${path.module}/codedeploy/appspec.yaml"
+  source = "${path.module}/codedeploy-appspec/appspec-template/appspec.yaml"
   acl    = "private"
 }
