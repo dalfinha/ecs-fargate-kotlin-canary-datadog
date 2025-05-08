@@ -13,3 +13,10 @@ variable "service_name" {}
 variable "arn_listener" {}
 
 variable "listeners_name" {}
+
+variable "task_definition_arn" {}
+
+variable "container_name" {}
+
+variable "port_application" {}
+
