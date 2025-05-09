@@ -1,15 +1,30 @@
 variable "ecs_cluster_name" {}
 
+variable "env_variables" {
+  type = list(object({
+    key   = string
+    value = string
+  }))
+}
+
 variable "env" {}
 
 variable "service_name" {}
 
 variable "role_task_arn" {}
 
-variable "role_eecution_arn" {}
+variable "role_execution_arn" {}
 
 variable "port_application" {}
 
-variable "env_variable" {
-  type = list(string)
+variable "subnet_id" {}
+
+variable "sg_default" {}
+
+variable "uri_image" {}
+
+variable "target_group" {
+  type = map(object({
+    arn = string
+  }))
 }

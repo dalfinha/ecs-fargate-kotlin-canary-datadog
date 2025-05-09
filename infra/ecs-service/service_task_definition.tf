@@ -31,7 +31,6 @@ resource "aws_ecs_task_definition" "this" {
       ]
       essential   = true
       environment = [
-
         for env in var.env_variables : {
           name  = env.key
           value = env.value

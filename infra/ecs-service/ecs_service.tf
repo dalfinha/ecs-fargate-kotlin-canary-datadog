@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "this" {
-  depends_on = [aws_ecs_task_definition.this, aws_lb.this]
+  depends_on = [aws_ecs_task_definition.this]
 
   name            = var.service_name
   cluster         = aws_ecs_cluster.this.id
@@ -26,16 +26,15 @@ resource "aws_ecs_service" "this" {
   }
 
   network_configuration {
-    subnets           = data.aws_subnets.this.ids
-    security_groups   = [data.aws_security_group.this.id]
+    subnets           = var.subnet_id
+    security_groups   = [ var.sg_default ]
     assign_public_ip  = true
   }
 
-
   load_balancer {
-    target_group_arn = aws_lb_target_group.this["blue"].arn
-    container_name   = "container-${local.project_name}"
-    container_port   = 8080
+    target_group_arn = var.target_group["blue"].arn
+    container_name   = "container-${var.service_name}"
+    container_port   = var.port_application
   }
 }
 
