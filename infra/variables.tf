@@ -34,3 +34,17 @@ variable "role_iam" {
   default = "ecs-tasks-demo"
 }
 
+# Service
+variable "role_task_arn" {}
+
+variable "role_execution_arn" {}
+
+variable "port_application" {}
+
+variable "subnet_id" {}
+
+variable "sg_default" {}
+
+variable "uri_image" {}
+
+variable "target_group" {}

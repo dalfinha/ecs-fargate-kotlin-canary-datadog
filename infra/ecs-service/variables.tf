@@ -23,8 +23,5 @@ variable "sg_default" {}
 
 variable "uri_image" {}
 
-variable "target_group" {
-  type = map(object({
-    arn = string
-  }))
-}
+variable "target_group" {}
+

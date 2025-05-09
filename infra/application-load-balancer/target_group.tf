@@ -1,7 +1,7 @@
 resource "aws_lb_target_group" "this" {
   for_each    = toset(["blue","green"])
 
-  name        = "canary-${each.key}"
+  name        = "${var.target_group_name}-${each.key}"
   target_type = "ip"
   port        = var.port_application
   protocol    = "HTTP"

@@ -32,7 +32,7 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = var.target_group["blue"].arn
+    target_group_arn = data.aws_lb_target_group.current.arn
     container_name   = "container-${var.service_name}"
     container_port   = var.port_application
   }

@@ -7,3 +7,5 @@ variable "scope" {}
 variable "port_application" {}
 
 variable "vpc_id" {}
+
+variable "target_group_name" {}
