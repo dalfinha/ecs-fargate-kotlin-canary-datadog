@@ -12,10 +12,6 @@ module "alb" {
   vpc_id            = data.aws_vpc.this.id
 }
 
-#module "codedeploy" {
-#  source = "./codedeploy-scope"
-#}
-
 module "ecs-service" {
   #depends_on = [ module.alb ]
   source = "./ecs-service"
@@ -37,4 +33,21 @@ module "ecs-service" {
 
   # Additional Configs in Task Definition
   env_variables      = []
+}
+
+module "codedeploy" {
+  source = "./codedeploy-scope"
+
+  cluster_name = var.ecs_cluster_name
+  service_name = var.service_name
+  target_group = "canary"
+
+  port_application = module.alb.port_application
+  role_codedeploy  = data.aws_iam_role.this.arn
+  deployment_config_canary = ""
+
+  #arn_listener =
+  #application_name = ""
+  #task_definition_arn = ""
+  #container_name = ""
 }
