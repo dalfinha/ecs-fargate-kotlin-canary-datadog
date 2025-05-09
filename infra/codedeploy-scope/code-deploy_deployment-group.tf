@@ -38,11 +38,11 @@ resource "aws_codedeploy_deployment_group" "this" {
       }
 
       target_group {
-        name = var.listeners_name.["green"].name
+        name = var.target_group["green"].name
       }
 
       target_group {
-        name = var.listeners_name.["blue"].name
+        name = var.target_group["blue"].name
       }
     }
   }

@@ -3,7 +3,7 @@ resource "null_resource" "this" {
 
   provisioner "local-exec" {
     working_dir = path.module
-    command     = "bash ./force-deploy.sh"
+    command     = "bash .scripts/force-deploy.sh"
 
     environment = {
       APPLICATION_NAME      = aws_codedeploy_app.this.name

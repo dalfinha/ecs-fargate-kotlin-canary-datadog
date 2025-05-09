@@ -12,7 +12,7 @@ variable "service_name" {}
 
 variable "arn_listener" {}
 
-variable "listeners_name" {} #TO-DO: adicionar como lista para acesso ao canary
+variable "target_group" {} #TO-DO: adicionar como lista para acesso ao canary
 
 variable "task_definition_arn" {}
 
