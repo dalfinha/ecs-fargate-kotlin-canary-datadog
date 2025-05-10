@@ -1,5 +1,3 @@
-variable "application_name" {}
-
 variable "role_codedeploy" {}
 
 variable "deployment_config_canary" {
@@ -9,8 +7,6 @@ variable "deployment_config_canary" {
 variable "cluster_name" {}
 
 variable "service_name" {}
-
-variable "arn_listener" {}
 
 variable "target_group" {} #TO-DO: adicionar como lista para acesso ao canary
 

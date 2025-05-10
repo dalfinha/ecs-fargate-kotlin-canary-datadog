@@ -1,6 +1,9 @@
 variable "sg_default" {}
 
-variable "subnet_id" {}
+variable "subnet_id" {
+    type = list(string)
+    default = []
+}
 
 variable "scope" {}
 

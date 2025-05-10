@@ -17,7 +17,10 @@ variable "role_execution_arn" {}
 
 variable "port_application" {}
 
-variable "subnet_id" {}
+variable "subnet_id" {
+  type = list(string)
+  default = []
+}
 
 variable "sg_default" {}
 

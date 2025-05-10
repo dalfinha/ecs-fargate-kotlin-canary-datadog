@@ -10,3 +10,7 @@ data "aws_ecs_service" "current" {
   cluster_name = var.cluster_name
   service_name = var.service_name
 }
+
+data "aws_ecs_task_definition" "current" {
+  service_name = var.service_name
+}

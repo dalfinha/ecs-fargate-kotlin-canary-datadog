@@ -35,16 +35,31 @@ variable "role_iam" {
 }
 
 # Service
-variable "role_task_arn" {}
+variable "role_task_arn" {
+  default = "role-task-arn"
+}
 
-variable "role_execution_arn" {}
+variable "role_execution_arn" {
+  default = "role-execution-arn"
+}
 
-variable "port_application" {}
+variable "port_application" {
+  default = 8080
+}
 
-variable "subnet_id" {}
+variable "subnet_id" {
+  type = list(string)
+  default = []
+}
 
-variable "sg_default" {}
+variable "sg_default" {
+  default = "default"
+}
 
-variable "uri_image" {}
+variable "uri_image" {
+  default = "hash-image-ecr"
+}
 
-variable "target_group" {}
+variable "target_group" {
+  default = "target-group-default"
+}
