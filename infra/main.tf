@@ -35,16 +35,18 @@ module "ecs-service" {
   env_variables      = []
 }
 
-#module "codedeploy" {
-#  source = "./codedeploy-scope"
-#
-#  cluster_name     = var.ecs_cluster_name
-#  service_name     = var.service_name
-#  target_group     = module.alb.target_group_name_list["blue"]
-#  port_application = module.alb.port_application
-#  role_codedeploy  = data.aws_iam_role.this.arn
-#  deployment_config_canary = "CodeDeployDefault.ECSCanary10Percent5Minutes"
+module "codedeploy" {
+  depends_on = [ module.ecs-service ]
+  source = "./codedeploy-scope"
 
+  cluster_name             = module.ecs-service.cluster_name
+  service_name             = module.ecs-service.service_name
+  target_group             = module.alb.target_group_name_list["blue"]
+  port_application         = module.alb.port_application
+  role_codedeploy          = data.aws_iam_role.this.arn
+  deployment_config_canary = "CodeDeployDefault.ECSCanary10Percent5Minutes"
+
+}
 #  arn_listener =
 #  application_name = ""
 #  task_definition_arn = ""
