@@ -4,14 +4,22 @@ variable "deployment_config_canary" {
   default = "CodeDeployDefault.ECSCanary10Percent5Minutes"
 }
 
-variable "cluster_name" {}
+variable "cluster_name" {
+  default = "meu-cluster-name"
+}
 
-variable "service_name" {}
+variable "service_name" {
+  default = "meu-service-name"
+}
 
-variable "target_group" {} #TO-DO: adicionar como lista para acesso ao canary
+variable "cluster_arn" {
+  default = "cluster_arn"
+}
 
-variable "task_definition_arn" {}
+variable "target_group" {
+  default = "seu-target-group"
+} #TO-DO: adicionar como lista para acesso ao canary
 
-variable "container_name" {}
-
-variable "port_application" {}
+variable "port_application" {
+  default = 10000
+}

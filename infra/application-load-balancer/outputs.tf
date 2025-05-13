@@ -8,3 +8,4 @@ output "target_group_name_list" {
     tg_key => tg.name
   }
 }
+

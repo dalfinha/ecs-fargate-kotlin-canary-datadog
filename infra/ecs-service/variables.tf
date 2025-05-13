@@ -22,6 +22,11 @@ variable "subnet_id" {
   default = []
 }
 
+variable "deployment_controller_type" {
+  type    = string
+  default = "CODE_DEPLOY"
+}
+
 variable "sg_default" {}
 
 variable "uri_image" {}

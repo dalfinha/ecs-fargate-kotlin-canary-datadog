@@ -38,11 +38,11 @@ resource "aws_codedeploy_deployment_group" "this" {
       }
 
       target_group {
-        name = data.aws_lb_target_group.current["blue"].name
+        name = data.aws_lb_target_group.blue.name
       }
 
       target_group {
-        name = data.aws_lb_target_group.current["green"].name
+        name = data.aws_lb_target_group.green.name
       }
     }
   }
