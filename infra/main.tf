@@ -35,15 +35,18 @@ module "ecs-service" {
   env_variables      = []
 }
 
-module "codedeploy" {
+module "code-deploy" {
   depends_on = [ module.ecs-service ]
   source = "./codedeploy-scope"
 
+  # Config Service
   cluster_name             = module.ecs-service.cluster_name
   cluster_arn              = module.ecs-service.cluster_arn
   service_name             = module.ecs-service.service_name
   target_group             = "canary"
   port_application         = module.alb.port_application
+
+  #Strategy Canary
   role_codedeploy          = data.aws_iam_role.this.arn
   deployment_config_canary = "CodeDeployDefault.ECSCanary10Percent5Minutes"
 
