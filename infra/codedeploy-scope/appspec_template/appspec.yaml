@@ -1,9 +1,0 @@
-version: 0.0
-Resources:
-  - TargetService:
-      Type: AWS::ECS::Service
-      Properties:
-        TaskDefinition: "arn:aws:ecs:us-east-1:846225554840:task-definition/family-kotlin-canary:6"
-        LoadBalancerInfo:
-          ContainerName: "container-kotlin-canary"
-          ContainerPort: "8080"
