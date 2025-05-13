@@ -1,9 +1,9 @@
 resource "aws_ecs_task_definition" "this" {
   depends_on = [aws_ecs_cluster.this]
 
-  family                = "family-${local.project_name}"
-  task_role_arn           = data.aws_iam_role.this.arn
-  execution_role_arn      = data.aws_iam_role.this.arn
+  family                = "family-${var.service_name}"
+  task_role_arn           = var.role_task_arn
+  execution_role_arn      = var.role_execution_arn
   network_mode            = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 
@@ -17,21 +17,20 @@ resource "aws_ecs_task_definition" "this" {
 
   container_definitions = jsonencode([
     {
-      name  = "container-${local.project_name}"
-      image = data.aws_ecr_image.this.image_uri
+      name  = "container-${var.service_name}"
+      image = var.uri_image
       cpu   = 256
       portMappings = [
         {
-          name          = "container-${local.project_name}-80-tcp"
-          containerPort = 8080
-          hostPort      = 8080
+          name          = "container-${var.service_name}-${var.port_application}-tcp"
+          containerPort = var.port_application
+          hostPort      = var.port_application
           protocol      = "tcp"
           appProtocol   = "http"
         }
       ]
       essential   = true
       environment = [
-
         for env in var.env_variables : {
           name  = env.key
           value = env.value

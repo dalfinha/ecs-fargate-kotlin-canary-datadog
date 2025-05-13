@@ -1,19 +1,27 @@
-output "iam_role" {
-  value = data.aws_iam_role.this.name
+output "service_name" {
+  value = module.ecs-service.service_name
+}
+
+output "container_name" {
+  value = module.ecs-service.container_name
 }
 
 output "last_image_ecr" {
   value = data.aws_ecr_image.this.image_uri
 }
 
-output "vpc_id" {
-  value = data.aws_vpc.this.id
+output "alb_name" {
+  value = module.alb.application_load_balancer_name
 }
 
-output "security_group_id" {
-  value = data.aws_security_group.this.id
+output "codedeploy_application" {
+  value = module.code-deploy.application_name_codedeploy
 }
 
-output "subnet_ids" {
-  value = data.aws_subnets.this.ids
+output "s3_appspec" {
+  value = module.code-deploy.s3_bucket
+}
+
+output "codedeploy-config-strategy" {
+  value = module.code-deploy.deploy_strategy
 }

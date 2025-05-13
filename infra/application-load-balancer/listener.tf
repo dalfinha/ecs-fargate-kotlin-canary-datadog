@@ -1,6 +1,8 @@
 resource "aws_lb_listener" "this" {
+  depends_on = [aws_lb.this, aws_lb_target_group.this]
+
   load_balancer_arn = aws_lb.this.arn
-  port              = 8080
+  port              = var.port_application
   protocol          = "HTTP"
 
   default_action {
