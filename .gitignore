@@ -44,6 +44,7 @@ bin/
 # Gradle
 .gradle/
 build/
+gradle
 
 # OS-specific
 Thumbs.db
