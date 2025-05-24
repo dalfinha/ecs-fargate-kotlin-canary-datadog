@@ -37,4 +37,4 @@ docker tag "$ECR_REPOSITORY_NAME:latest" "$URI_ECR_REPOSITORY:$NEXT_TAG"
 echo "Realizando push da imagem $NEXT_TAG..."
 docker push "$URI_ECR_REPOSITORY:$NEXT_TAG"
 
-echo "Push realizado com sucesso! | Nova versão: $URI_ECR_REPOSITORY:$NEXT_TAG"
+echo "Push realizado com sucesso! | Nova versão: $ECR_REPOSITORY_NAME:$NEXT_TAG"
