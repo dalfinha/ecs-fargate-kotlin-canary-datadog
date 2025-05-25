@@ -1,7 +1,7 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-    <appender name="JSON_CONSOLE" class="net.logstash.logback.appender.LoggingEventCompositeJsonEncoder">
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 

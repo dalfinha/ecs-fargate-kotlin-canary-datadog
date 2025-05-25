@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component
 import kotlin.random.Random
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import net.logstash.logback.argument.StructuredArguments.keyValue
 
 @Component
 class ScheduledTask(private val numbersApiService: NumbersApiService) {
@@ -23,6 +24,11 @@ class ScheduledTask(private val numbersApiService: NumbersApiService) {
         val payload = LogPayload(sortFirst, sortSecond, sortSum, data)
         val jsonLog = objectMapper.writeValueAsString(payload)
 
-        logger.info(jsonLog)
+        logger.info("sort number: {}, {}, sum: {}, response: {}",
+            keyValue("sortFirst", sortFirst),
+            keyValue("sortSecond", sortSecond),
+            keyValue("sortSum", sortSum),
+            keyValue("response", data)
+        )
     }
 }
