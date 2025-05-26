@@ -26,7 +26,7 @@ variable "env" {
 
 variable "ecr_repository" {
   type  = string
-  default = "demo/kotlin-app-canary"
+  default = "demo-spring-app"
 }
 
 variable "role_iam" {
