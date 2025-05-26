@@ -13,7 +13,7 @@ class ScheduledTask(private val numbersApiService: NumbersApiService) {
     private val logger = LoggerFactory.getLogger(ScheduledTask::class.java)
     private val objectMapper = jacksonObjectMapper()
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 60000)
     fun generateRandomSum() {
         val sortFirst = Random.nextInt(100)
         val sortSecond = Random.nextInt(100)
