@@ -24,7 +24,7 @@ class ScheduledTask(private val numbersApiService: NumbersApiService) {
         val payload = LogPayload(sortFirst, sortSecond, sortSum, data)
         val jsonLog = objectMapper.writeValueAsString(payload)
 
-        logger.info("sort number: {}, {}, sum: {}, response: {}",
+        logger.info("sortNumbers: {}, {}, sum: {}, response: {}",
             keyValue("sortFirst", sortFirst),
             keyValue("sortSecond", sortSecond),
             keyValue("sortSum", sortSum),
