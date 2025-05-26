@@ -2,10 +2,11 @@
 set -e
 
 ECR_REPOSITORY_NAME=${1:-demo-spring-app}
-AWS_REGION="us-east-1"
+AWS_REGION=${2:-us-east-1}
 
+echo "## PULL ECR - $ECR_ECR_REPOSITORY_NAME ##"
 if [ -z "$ECR_REPOSITORY_NAME" ]; then
-  echo "Erro: Nome do repositório ECR não informado"
+  echo -e '\033[0;31mErro: O nome do repositório não pode estar vazio!\033[0m'
   exit 1
 fi
 
@@ -31,7 +32,7 @@ fi
 
 NEW_TAG="v$NEXT_VERSION"
 
-echo "Criando nova tag incremental: $NEW_TAG"
+echo "Criando nova tag: $NEW_TAG"
 docker tag "$ECR_REPOSITORY_NAME:latest" "$URI_ECR_REPOSITORY:$NEW_TAG"
 docker push "$URI_ECR_REPOSITORY:$NEW_TAG"
-echo "Push realizado com sucesso! Nova versão: $NEW_TAG"
+echo -e "\033[1;32mPush realizado com sucesso! Nova versão: $NEW_TAG\033[0m"
