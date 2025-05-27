@@ -1,16 +1,42 @@
 # ecs-fargate-kotlin-canary-datadog
 
-## 🏷️ v1.5.0 - Modularização na criação do Load Balancer, ECS Service e CodeDeploy
+## 🏷️ v2.0.0 - Integração da aplicação Kotlin com API Numbers (http://numbersapi.com/)
 
-Este projeto provisiona uma infraestrutura completa para realizar deployments com estratégia *blue/green* em serviços ECS Fargate, utilizando AWS CodeDeploy. Agora, dividido em módulos, é possível criar apenas os componentes que desejar, como apenas o CodeDeploy ou apenas o Application Load Balancer. 
+Este projeto provisiona uma infraestrutura completa para realizar deployments com estratégia *blue/green* em serviços ECS Fargate, utilizando AWS CodeDeploy. Agora, dividido em módulos, é possível criar apenas os componentes que desejar, como apenas o CodeDeploy ou apenas o Application Load Balancer.
 
-A pasta `/app` contém uma aplicação básica em `Kotlin` (SEM SPRING) para testar o rollout e rollback do Canary.
+A pasta `/app` contém uma aplicação básica em `Kotlin` com SPRING para testar o rollout e rollback do Canary. A aplicação obtem dois números aleatórios, soma o número e consulta informações de uma trivia através da API Numbers, uma API pública que permite consultas sem credenciais. Também foi configurado um payload de log para uso durante a instrumentação do Datadog. 
 
+
+### 📃 Payload da saída de log
+```json
+{
+    "@timestamp": "2025-05-27T01:40:58.995531147Z",
+    "@version": "1",
+    "message": "sort number: sortFirst=98, sortSecond=0, sum: sortSum=98, response: response=NumberFact(text=98 is the highest jersey number allowed in the National Hockey League (as 99 was retired by the entire league to honor Wayne Gretzky)., number=98, found=true, type=trivia)",
+    "logger_name": "app.ScheduledTask",
+    "thread_name": "scheduling-1",
+    "level": "INFO",
+    "level_value": 20000,
+    "sortFirst": 98,
+    "sortSecond": 0,
+    "sortSum": 98,
+    "response": {
+        "text": "98 is the highest jersey number allowed in the National Hockey League (as 99 was retired by the entire league to honor Wayne Gretzky).",
+        "number": 98,
+        "found": true,
+        "type": "trivia"
+    }
+}
+```
 ---
 
 ## 📂 Estrutura de Pastas
 
 ```
+./app
+└──scripts
+   ├── local_pull_ecr.sh
+   └── local_gradle_build.sh
 ./infra
 ├── application-load-balancer
 │   ├── application_load_balancer.tf
@@ -30,7 +56,7 @@ A pasta `/app` contém uma aplicação básica em `Kotlin` (SEM SPRING) para tes
 │   ├── outputs.tf
 │   ├── s3_revision_object.tf
 │   ├── scripts
-│   │   └── force-deploy.sh
+│   │   └── local_force_deploy.sh
 │   └── variables.tf
 ├── ecs-service
 │   ├── data.tf
@@ -51,9 +77,12 @@ A pasta `/app` contém uma aplicação básica em `Kotlin` (SEM SPRING) para tes
     ├── providers.tf
     └── variables.tf
 ```
-
 ---
+## 📜 Scripts auxiliares (`/app/scripts`)
 
+- `local_gradle_build.sh`: Compila o projeto com Gradle, gera o JAR, cria a imagem Docker e chama o local_pull_ecr.sh para versionar e enviar a imagem ao ECR.
+- `local_pull_ecr.sh`: Autentica no ECR, busca a próxima versão disponível, cria uma nova tag baseada nela e faz o push da imagem Docker para o repositório.
+---
 ## 🔧 Componentes Principais
 
 - **ECS Fargate**: Ambiente de execução para os containers.
@@ -61,7 +90,7 @@ A pasta `/app` contém uma aplicação básica em `Kotlin` (SEM SPRING) para tes
 - **Target Groups**: Criados dinamicamente para `blue` e `green`.
 - **AWS CodeDeploy**: Orquestra a troca de tráfego entre versões.
 - **AppSpec**: Template para controlar o comportamento do deploy.
-- **Scripts locais**: Sobrescrevem o appspec.yaml e forçam novos deploys de forma automática. 
+- **Scripts locais**: Sobrescrevem o appspec.yaml, forçam novos deploys de forma automática, buildam o Gradlew e executam o Docker para validação. Também permitem o pull automático para um ECR repository.
 
 ---
 
@@ -85,7 +114,7 @@ Por padrão, está `us-east-1` para compatibilidade com a conta free-tier.
 
 ```hcl
 terraform {
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/application-load-balancer?ref=develop"
+  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/application-load-balancer?ref=v2.0.0"
 }
 ```
 
@@ -115,38 +144,26 @@ terraform apply -var-file="inventories/variables.tfvars"
 - O listener padrão aponta inicialmente para o `blue`.
 - O `AppSpec` é gerado e excluído localmente após o deploy.
 - Um novo deploy ocorre via execução local do Terraform.
-- Módulos são independentes, mas exigem dependências previamente criadas. Em situações de reuso, garanta que a infraestrutura seja compatível, 
+- Módulos são independentes, mas exigem dependências previamente criadas. Em situações de reuso, garanta que a infraestrutura seja compatível.
 
 ---
 
 ## ⌨️ Próximos passos
 
-### ✅ v1.0.0
-Canary Blue/Green Deployment com ECS e CodeDeploy via Terraform
+#### ✅ v1.0.0 - Canary Blue/Green Deployment com ECS e CodeDeploy via Terraform
+#### ✅ v1.5.0  - Modularização na criação do Load Balancer, ECS Service e CodeDeploy
+#### ✅ v2.0.0 - Integração da aplicação Kotlin com API externa -> http://numbersapi.com/
 
-### ✅ v1.5.0
-Modularização na criação do Load Balancer, ECS Service e CodeDeploy
-
-### 🏷️ v2.0.0
-Integração da aplicação Kotlin com API externa
-
-- [ ] Remoção dos logs da aplicação de soma aleatória
-- [ ] Diminuir intervalo entre somas aleatórias
-- [ ] Incluir API Numbers ([http://numbersapi.com/](http://numbersapi.com/#42))
-- [ ] Formatar log da API Numbers
-
-### 🏷️ v2.5.0
-Monitoramento com Datadog APM
-
-- [ ] Criar role com políticas do Datadog (ECS)
-- [ ] Instrumentar ECS com Datadog
-- [ ] Adicionar `DD_API_KEY` como env var
+### 🏷️ v2.5.0 - Monitoramento com Datadog APM
 - [ ] Criar secrets no Terraform
+- [ ] Adicionar `DD_API_KEYs` como env var
+- [ ] Criar role com políticas do Datadog (ECS)
+- [ ] Instrumentação do OpenTelemetry
+- [ ] Instrumentar ECS com Datadog
 - [ ] Validar ingestão de logs e APM
 - [ ] Taguear serviço ECS com Terraform
-
 ---
 
 ## ❌ Falhas ao executar?
 
-Abra uma **issue**! Correções e contribuições são bem-vindas.
+Abra uma **issue**! Correções e contricd buições são bem-vindas.
