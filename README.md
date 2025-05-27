@@ -4,7 +4,7 @@
 
 Este projeto provisiona uma infraestrutura completa para realizar deployments com estratégia *blue/green* em serviços ECS Fargate, utilizando AWS CodeDeploy. Agora, dividido em módulos, é possível criar apenas os componentes que desejar, como apenas o CodeDeploy ou apenas o Application Load Balancer.
 
-A pasta `/app` contém uma aplicação básica em `Kotlin` com SPRING para testar o rollout e rollback do Canary. A aplicação obtem dois números aleatórios, soma o número e consulta informações de uma trivia através da API Numbers, uma API pública que permite consultas sem credenciais. Também foi configurado um payload de log para uso durante a instrumentação do Datadog. 
+A pasta `/app` contém uma aplicação básica em `Kotlin` com SPRING para testar o rollout e rollback do Canary. A aplicação obtem dois números aleatórios, soma o número e consulta informações de uma trivia através da API Numbers, uma API pública que permite consultas sem credenciais, também configurando um payload de log para uso durante a instrumentação do Datadog. 
 
 
 ### 📃 Payload da saída de log
