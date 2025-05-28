@@ -1,5 +1,5 @@
 module "alb" {
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/application-load-balancer?ref=develop"
+  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/application-load-balancer?ref=v2.0.0"
 
   #ALB
   scope      = var.service_name
@@ -14,7 +14,7 @@ module "alb" {
 
 module "ecs-service" {
   depends_on = [ module.alb ]
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/ecs-service?ref=develop"
+  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/ecs-service?ref=v2.0.0"
 
   env    = "dev"
   # Service Config
@@ -36,7 +36,7 @@ module "ecs-service" {
 
 module "code-deploy" {
   depends_on = [ module.ecs-service ]
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/codedeploy-scope?ref=develop"
+  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/codedeploy-scope?ref=v2.0.0"
 
   # Config Service
   cluster_name             = module.ecs-service.cluster_name
