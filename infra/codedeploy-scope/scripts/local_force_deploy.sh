@@ -23,6 +23,6 @@ DEPLOYMENT_ID=$(aws deploy create-deployment \
   --revision "{\"revisionType\": \"S3\", \"s3Location\": {\"bucket\": \"$S3_APPSPEC\", \"key\": \"appspec.yaml\", \"bundleType\": \"yaml\"}}" \
   --output text --query deploymentId)
 
-echo "ID do deployment: $DEPLOYMENT_ID"
+echo -e "\033[1;32mID do deployment: $DEPLOYMENT_ID\033[0m"
 
 rm -rf ./codedeploy/appspec.yaml

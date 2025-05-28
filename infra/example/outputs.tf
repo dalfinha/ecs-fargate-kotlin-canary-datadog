@@ -2,7 +2,7 @@ output "service_name" {
   value = module.ecs-service.service_name
 }
 
-output "container_name" {
+output "container_configs" {
   value = module.ecs-service.container_name
 }
 
