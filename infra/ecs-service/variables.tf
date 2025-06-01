@@ -55,5 +55,5 @@ variable "target_group" {
 
 variable "enable_datadog" {
   type    = bool
-  default = false
+  default = true
 }
