@@ -53,3 +53,7 @@ variable "target_group" {
   description = "Nome do Target Group"
 }
 
+variable "enable_datadog" {
+  type    = bool
+  default = false
+}

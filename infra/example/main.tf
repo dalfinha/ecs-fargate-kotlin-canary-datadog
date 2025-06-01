@@ -14,7 +14,7 @@ module "alb" {
 
 module "ecs-service" {
   depends_on = [ module.alb ]
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/ecs-service?ref=v2.0.0"
+  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/ecs-service?ref=feature/secrets"
 
   env    = "dev"
   # Service Config
@@ -31,8 +31,14 @@ module "ecs-service" {
   target_group       = module.alb.target_group_name_list["blue"]
 
   # Additional Configs in Task Definition
-  env_variables      = []
+  env_variables      = [
+    {
+      key   = "DD_API_KEY"
+      value = "KEY_ID"
+    }
+  ]
 }
+
 
 module "code-deploy" {
   depends_on = [ module.ecs-service ]
