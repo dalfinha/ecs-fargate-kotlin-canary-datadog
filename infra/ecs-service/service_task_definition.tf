@@ -18,7 +18,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode(
     concat(
       [
-        {""
+        {
           name  = "container-${var.service_name}"
           image = var.uri_image
           cpu   = 256
