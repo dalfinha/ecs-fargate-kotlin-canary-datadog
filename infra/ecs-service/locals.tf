@@ -4,6 +4,8 @@ locals {
   container_definition = jsondecode(aws_ecs_task_definition.this.container_definitions)
   container_name = local.container_definition[0].name
 
+  dd_version    = split("@", var.uri_image)[1]
+
   datadog_configure = concat(var.env_variables, [
     {
       name  = "ECS_FARGATE",
@@ -27,7 +29,7 @@ locals {
     },
     {
       name  = "DD_VERSION",
-      value = var.uri_image
+      value = local.dd_version
     },
     {
       name  = "DD_SERVICE",
