@@ -18,7 +18,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode(
     concat(
       [
-        {
+        {""
           name  = "container-${var.service_name}"
           image = var.uri_image
           cpu   = 256
@@ -63,10 +63,7 @@ resource "aws_ecs_task_definition" "this" {
           memory    = 256
           essential = false
           environment = [
-            { name = "ECS_FARGATE", value = "true" },
-            { name = "DD_SITE", value = "datadoghq.com" },
-            { name = "DD_LOGS_ENABLED", value = "true" },
-            { name = "DD_APM_ENABLED", value = "true" }
+            local.datadog_configure
           ]
           portMappings = [
             {
