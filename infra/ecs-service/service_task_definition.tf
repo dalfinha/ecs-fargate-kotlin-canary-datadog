@@ -62,9 +62,8 @@ resource "aws_ecs_task_definition" "this" {
           cpu       = 64
           memory    = 256
           essential = false
-          environment = [
-            local.datadog_configure
-          ]
+          environment = local.datadog_configure
+
           portMappings = [
             {
               containerPort = 8126
