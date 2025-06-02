@@ -17,3 +17,7 @@ output "container_name" {
 output "task_definition_acctual" {
   value = aws_ecs_task_definition.this.id
 }
+
+output "datadog" {
+  value = var.enable_datadog
+}
