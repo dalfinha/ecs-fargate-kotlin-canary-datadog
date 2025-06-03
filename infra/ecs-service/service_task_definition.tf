@@ -22,6 +22,7 @@ resource "aws_ecs_task_definition" "this" {
           name  = "container-${var.service_name}"
           image = var.uri_image
           cpu   = 256
+          memory = 512
           portMappings = [
             {
               name          = "container-${var.service_name}-${var.port_application}-tcp"
@@ -90,6 +91,8 @@ resource "aws_ecs_task_definition" "this" {
         {
           name      = "datadog-fluentbit"
           image     = "public.ecr.aws/aws-observability/aws-for-fluent-bit:latest"
+          cpu       = 64
+          memory    = 256
           essential = false
           firelensConfiguration = {
             type = "fluentbit"
