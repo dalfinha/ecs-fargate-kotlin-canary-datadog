@@ -1,10 +1,10 @@
 resource "aws_ecs_task_definition" "this" {
   depends_on = [aws_ecs_cluster.this]
 
-  family                  = "family-${var.service_name}"
-  task_role_arn           = var.role_task_arn
-  execution_role_arn      = var.role_execution_arn
-  network_mode            = "awsvpc"
+  family                   = "family-${var.service_name}"
+  task_role_arn            = var.role_task_arn
+  execution_role_arn       = var.role_execution_arn
+  network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 
   cpu    = var.enable_datadog ? "512" : "256"
@@ -44,20 +44,20 @@ resource "aws_ecs_task_definition" "this" {
             ] : []
           )
           logConfiguration = {
-            logDriver = "awslogs"
+            logDriver = "awsfirelens"
             options = {
-              awslogs-group         = aws_cloudwatch_log_group.this.name
-              mode                  = "non-blocking"
-              max-buffer-size       = "25m"
-              awslogs-region        = data.aws_region.current.id
-              awslogs-stream-prefix = "ecs"
+              Name              = "cloudwatch"
+              region            = data.aws_region.current.id
+              log_group_name    = aws_cloudwatch_log_group.this.name
+              auto_create_group = "true"
+              log_stream_prefix = "ecs/"
             }
           }
         }
       ],
         var.enable_datadog ? [
         {
-          name      = "datadog-agent"
+          name      = "datadog-apm"
           image     = "public.ecr.aws/datadog/agent:latest"
           cpu       = 64
           memory    = 256
@@ -80,11 +80,39 @@ resource "aws_ecs_task_definition" "this" {
           }
           secrets = [
             {
-              name = "DD_API_KEY"
+              name      = "DD_API_KEY"
               valueFrom = local.datadog_api_key
-            }]
+            }
+          ]
         }
-      ] : []
+      ] : [],
+      [
+        {
+          name      = "datadog-fluentbit"
+          image     = "public.ecr.aws/aws-observability/aws-for-fluent-bit:latest"
+          essential = false
+          firelensConfiguration = {
+            type = "fluentbit"
+            options = {
+              "enable-ecs-log-metadata" = "true"
+            }
+          }
+          logConfiguration = {
+            logDriver = "awslogs"
+            options = {
+              awslogs-group         = aws_cloudwatch_log_group.this.name
+              awslogs-region        = data.aws_region.current.id
+              awslogs-stream-prefix = "ecs"
+            }
+          }
+          secrets = [
+            {
+              name      = "DD_API_KEY"
+              valueFrom = local.datadog_api_key
+            }
+          ]
+        }
+      ]
     )
   )
 }

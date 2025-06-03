@@ -38,4 +38,20 @@ locals {
   ])
 
   datadog_api_key   = var.enable_datadog ? data.aws_secretsmanager_secret.datadog.arn : null
+
+  fluentbit_container_config = [
+    {
+      essential      = false
+      image          = "public.ecr.aws/aws-observability/aws-for-fluent-bit:latest"
+      name           = "fluentbit"
+      firelensConfiguration = {
+        "type" = "fluentbit"
+        "options" = {
+          "enable-ecs-log-metadata" = "true" #TO-DO testar o envio dos dados do container
+        }
+      }
+    }
+  ]
+
+
 }
