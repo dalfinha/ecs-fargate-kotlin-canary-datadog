@@ -86,7 +86,7 @@ resource "aws_ecs_task_definition" "this" {
           ]
         }
       ] : [],
-      [
+        var.enable_datadog ? [
         {
           name      = "datadog-fluentbit"
           image     = "public.ecr.aws/aws-observability/aws-for-fluent-bit:latest"
@@ -112,7 +112,7 @@ resource "aws_ecs_task_definition" "this" {
             }
           ]
         }
-      ]
+      ] : []
     )
   )
 }
