@@ -31,12 +31,8 @@ module "ecs-service" {
   target_group       = module.alb.target_group_name_list["blue"]
 
   # Additional Configs in Task Definition
-  env_variables      = [
-    {
-      key   = "DD_API_KEY"
-      value = "KEY_ID"
-    }
-  ]
+  env_variables      = []
+  enable_datadog     = true
 }
 
 

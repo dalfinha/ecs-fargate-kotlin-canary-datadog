@@ -25,3 +25,7 @@ output "s3_appspec" {
 output "codedeploy-config-strategy" {
   value = module.code-deploy.deploy_strategy
 }
+
+output "datadog" {
+  value = module.ecs-service.datadog
+}
