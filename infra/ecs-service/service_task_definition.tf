@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "this" {
               { name = "DD_AGENT_HOST", value = "127.0.0.1" }
             ] : []
           )
-          logConfiguration = var.enable_datadog ? {
+          logConfiguration =  {
             logDriver = "awsfirelens"
             options = {
               Name        = "datadog"
@@ -60,15 +60,6 @@ resource "aws_ecs_task_definition" "this" {
                 valueFrom = local.datadog_api_key
               }
             ]
-          } :  {
-            logDriver = "awslogs"
-            options = {
-              awslogs-group         = aws_cloudwatch_log_group.this.name
-              mode                  = "non-blocking"
-              max-buffer-size       = "25m"
-              awslogs-region        = data.aws_region.current.id
-              awslogs-stream-prefix = "ecs"
-            }
           }
         }
       ],
