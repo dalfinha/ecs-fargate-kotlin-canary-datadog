@@ -55,6 +55,12 @@ resource "aws_ecs_task_definition" "this" {
               dd_tags     = "env:${var.env}"
             }
           }
+          secrets = [
+            {
+              name      = "DD_API_KEY"
+              valueFrom = local.datadog_api_key
+            }
+          ]
         }
       ],
         var.enable_datadog ? [
