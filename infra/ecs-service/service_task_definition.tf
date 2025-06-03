@@ -47,11 +47,12 @@ resource "aws_ecs_task_definition" "this" {
           logConfiguration = {
             logDriver = "awsfirelens"
             options = {
-              Name              = "cloudwatch"
-              region            = data.aws_region.current.id
-              log_group_name    = aws_cloudwatch_log_group.this.name
-              auto_create_group = "true"
-              log_stream_prefix = "ecs/"
+              Name        = "datadog"
+              Host        = "http-intake.logs.datadoghq.com"
+              TLS         = "on"
+              dd_service  = var.service_name
+              dd_source   = "kotlin"
+              dd_tags     = "env:${var.env}"
             }
           }
         }
