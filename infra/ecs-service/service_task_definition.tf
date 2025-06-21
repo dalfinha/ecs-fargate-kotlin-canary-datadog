@@ -47,7 +47,7 @@ resource "aws_ecs_task_definition" "this" {
               value = env.value
               }
             ],
-             var.enable_datadog ? [local.dd_variables] : []
+             var.enable_datadog ? local.dd_variables : []
           )
           logConfiguration = var.enable_datadog ? local.fluentbit : local.cloudwatch_logs
         }
