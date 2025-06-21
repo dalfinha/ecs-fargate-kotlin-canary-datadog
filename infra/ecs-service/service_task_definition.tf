@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "this" {
         {
           name  = "container-${var.service_name}"
           image = var.uri_image
-          cpu   = 256
+          cpu   = var.enable_datadog == true ? 384 : 256
           memory = 512
           portMappings = [
             {
