@@ -37,4 +37,8 @@ resource "aws_ecs_service" "this" {
     container_name   = "container-${var.service_name}"
     container_port   = var.port_application
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
