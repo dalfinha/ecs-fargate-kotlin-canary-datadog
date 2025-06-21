@@ -42,6 +42,17 @@ locals {
   ])
   dd_api_key = var.enable_datadog ? data.aws_secretsmanager_secret.datadog.arn : null
 
+  cloudwatch_logs = {
+    logDriver = "awslogs"
+    options = {
+      awslogs-group         = aws_cloudwatch_log_group.this.name
+      mode                  = "non-blocking"
+      max-buffer-size       = "25m"
+      awslogs-region        = data.aws_region.current.id
+      awslogs-stream-prefix = "ecs"
+    }
+    secretOptions = []
+  }
   fluentbit = {
     logDriver = "awsfirelens"
     options = {

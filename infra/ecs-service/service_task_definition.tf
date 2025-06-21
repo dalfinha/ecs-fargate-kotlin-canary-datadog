@@ -42,18 +42,7 @@ resource "aws_ecs_task_definition" "this" {
             ],
              var.enable_datadog ? [local.dd_variables] : []
           )
-          logConfiguration = var.enable_datadog ? local.fluentbit :
-            {
-              logDriver = "awslogs"
-              options = {
-                awslogs-group         = aws_cloudwatch_log_group.this.name
-                mode                  = "non-blocking"
-                max-buffer-size       = "25m"
-                awslogs-region        = data.aws_region.current.id
-                awslogs-stream-prefix = "ecs"
-              }
-              secretOptions = []
-           }
+          logConfiguration = var.enable_datadog ? local.fluentbit : local.cloudwatch_logs
         }
       ],
         var.enable_datadog ? [local.dd_apm_configure] : [],
