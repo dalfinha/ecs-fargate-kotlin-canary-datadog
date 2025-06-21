@@ -3,6 +3,7 @@ variable "ecs_cluster_name" {
 }
 
 variable "env_variables" {
+  description = "Variaveis de ambiente associadas ao container"
   type = list(object({
     key   = string
     value = string
@@ -11,12 +12,12 @@ variable "env_variables" {
 }
 
 variable "env" {
-  description = "Variavel de ambiente"
+  description = "Variavel de ambiente. OBS: Pode habilitar o uso do Container Insights"
   default = "dev"
 }
 
 variable "service_name" {
-  description = "Nome do Serviço e Containers"
+  description = "Nome do Serviço ECS Fargate"
 }
 
 variable "role_task_arn" {
@@ -28,10 +29,11 @@ variable "role_execution_arn" {
 }
 
 variable "port_application" {
-  description = "Porta da aplicação"
+  description = "Porta da Aplicação"
 }
 
 variable "subnet_id" {
+  description = "Lista de Subnets associadas ao Serviço ECS"
   type = list(string)
   default = []
 }
@@ -42,7 +44,7 @@ variable "deployment_controller_type" {
 }
 
 variable "sg_default" {
-  description = "Security Group da aplicação"
+  description = "Security Group da Aplicação"
 }
 
 variable "uri_image" {
@@ -50,10 +52,11 @@ variable "uri_image" {
 }
 
 variable "target_group" {
-  description = "Nome do Target Group"
+  description = "Nome do Target Group que será associado ao serviço. OBS: Não adicionar o -blue ou -green"
 }
 
 variable "enable_datadog" {
+  description = "Habilita o uso do Datadog Logs e APM na aplicação"
   type    = bool
   default = false
 }
