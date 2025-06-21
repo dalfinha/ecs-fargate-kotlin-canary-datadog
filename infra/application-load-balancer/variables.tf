@@ -4,6 +4,7 @@ variable "sg_default" {
 }
 
 variable "subnet_id" {
+    description = "Lista de Subnets associadas ao Serviço ECS"
     type = list(string)
     default = []
 }
@@ -18,7 +19,9 @@ variable "port_application" {
     type = number
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+    description = "VPC associada ao Application Load Balancer"
+}
 
 variable "target_group_name" {
     description = "Nome do Target Group (blue e green)"
