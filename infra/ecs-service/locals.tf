@@ -76,13 +76,6 @@ locals {
     cpu       = 64
     memory    = 256
     essential = false
-    healthCheck = {
-      command     = ["CMD-SHELL", "curl -f http://localhost:8126/health || exit 1"]
-      interval    = 30
-      timeout     = 5
-      retries     = 3
-      startPeriod = 60
-    }
     environment = local.dd_variables
     portMappings = [
       {
