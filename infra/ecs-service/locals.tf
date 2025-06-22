@@ -63,9 +63,9 @@ locals {
       Name        = "datadog"
       Host        = "http-intake.logs.datadoghq.com"
       TLS         = "on"
-      dd_service  = var.service_name
-      dd_source   = "kotlin"
-      dd_tags     = "env:${var.env}"
+      DD_SERVICE  = var.service_name
+      DD_SOURCE  = "kotlin"
+      DD_TAGS    = "env:${var.env}"
     }
     secretOptions = [
       {
@@ -108,12 +108,14 @@ locals {
     cpu       = 64
     memory    = 256
     essential = false
+    environment = local.dd_variables
     firelensConfiguration = {
       type = "fluentbit"
       options = {
         "enable-ecs-log-metadata" = "true"
       }
     }
+
     logConfiguration = {
       logDriver = "awslogs"
       options = {
