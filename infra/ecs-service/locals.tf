@@ -20,6 +20,10 @@ locals {
       value = "true"
     },
     {
+      name  = "DD_LOGS_INJECTION",
+      value = "true"
+    },
+    {
       name  = "DD_APM_ENABLED",
       value = "true"
     },
