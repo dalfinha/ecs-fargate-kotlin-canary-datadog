@@ -35,7 +35,7 @@ flowchart TD
 > [!TIP] 
 > Também é possível utilizar o `terraform graph` para mapear as dependências explícitas da infraestrutura! [graph](graphviz.png)
 
-
+---
 ### 📃 Payload da saída de log
 ```json
 {
