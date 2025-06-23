@@ -6,7 +6,8 @@ Este projeto provisiona uma infraestrutura no Terraform pronta para realizar dep
 
 A pasta /app contém uma aplicação básica em Kotlin com SPRING para testar o rollout e rollback do Canary. A aplicação obtém dois números aleatórios, soma o número e consulta informações de uma trivia através da API Numbers. Os logs agora incluem payloads estruturados compatíveis com o Datadog APM e Datadog Logs. 
 
-### Dependências 
+---
+### 🌀 Dependências 
 ```mermaid
 flowchart TD
     subgraph ECS Cluster
