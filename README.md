@@ -1,10 +1,38 @@
 # ecs-fargate-kotlin-canary-datadog
 
-## 🏷️ v2.0.0 - Integração da aplicação Kotlin com API Numbers (http://numbersapi.com/)
+## 🏷️ v2.5.0 - Adição do Datadog Logs e Datadog APM no container da aplicação. 
 
-Este projeto provisiona uma infraestrutura completa para realizar deployments com estratégia *blue/green* em serviços ECS Fargate, utilizando AWS CodeDeploy. Agora, dividido em módulos, é possível criar apenas os componentes que desejar, como apenas o CodeDeploy ou apenas o Application Load Balancer.
+Este projeto provisiona uma infraestrutura no Terraform pronta para realizar deployments com estratégia blue/green em serviços ECS Fargate, utilizando AWS CodeDeploy. Agora, dividido em módulos, é possível criar apenas os componentes que desejar, como apenas o CodeDeploy ou apenas o Application Load Balancer. Nessa nova versão, agora é possível utilizar o Datadog para envio de Logs e Trace da aplicação de forma automática, utilizando a variável `enable_datadog = true`.
 
-A pasta `/app` contém uma aplicação básica em `Kotlin` com SPRING para testar o rollout e rollback do Canary. A aplicação obtem dois números aleatórios, soma o número e consulta informações de uma trivia através da API Numbers, uma API pública que permite consultas sem credenciais, também configurando um payload de log para uso durante a instrumentação do Datadog. 
+A pasta /app contém uma aplicação básica em Kotlin com SPRING para testar o rollout e rollback do Canary. A aplicação obtém dois números aleatórios, soma o número e consulta informações de uma trivia através da API Numbers. Os logs agora incluem payloads estruturados compatíveis com o Datadog APM e Datadog Logs. 
+
+### Dependências 
+```mermaid
+flowchart TD
+    subgraph ECS Cluster
+        ECS[ECS Fargate]
+        Service[ECS Service]
+        ECS --> Service
+    end
+
+    Service --> TGBlue[Target Group Blue]
+    Service --> TGGreen[Target Group Green]
+
+    ALB[Application Load Balancer] -->|Roteia tráfego| TGBlue
+    ALB -->|Roteia tráfego| TGGreen
+
+    Service -->|Logs e APM| Datadog[(Datadog)]
+
+    CodeDeploy[AWS CodeDeploy]
+    S3["S3: AppSpec e revisões"]
+
+    TGBlue --> CodeDeploy
+    TGGreen --> CodeDeploy
+    CodeDeploy --> S3
+```
+
+> [!TIP] 
+> Também é possível utilizar o `terraform graph` para mapear as dependências explícitas da infraestrutura! [graph](graphviz.png)
 
 
 ### 📃 Payload da saída de log
@@ -47,8 +75,8 @@ A pasta `/app` contém uma aplicação básica em `Kotlin` com SPRING para testa
 ├── codedeploy-scope
 │   ├── appspec_template
 │   │   └── appspec_sample_template.yaml
-│   ├── code-deploy_application.tf
-│   ├── code-deploy_deployment-group.tf
+│   ├── code_deploy_application.tf
+│   ├── code_deploy_deployment_group.tf
 │   ├── data.tf
 │   ├── local_appspec.tf
 │   ├── local_deployment_group_force.tf
@@ -88,38 +116,32 @@ A pasta `/app` contém uma aplicação básica em `Kotlin` com SPRING para testa
 - **ECS Fargate**: Ambiente de execução para os containers.
 - **Application Load Balancer (ALB)**: Balanceador com listener único na porta 8080.
 - **Target Groups**: Criados dinamicamente para `blue` e `green`.
+- **ECS Service**: Com a task_definition, faz o deploy do serviço com as configurações do Datadog.
 - **AWS CodeDeploy**: Orquestra a troca de tráfego entre versões.
 - **AppSpec**: Template para controlar o comportamento do deploy.
 - **Scripts locais**: Sobrescrevem o appspec.yaml, forçam novos deploys de forma automática, buildam o Gradlew e executam o Docker para validação. Também permitem o pull automático para um ECR repository.
-
 ---
-
 ## 📋 Pré-requisitos
 
-0. Conta AWS válida.
+0. Conta AWS ativa.
 1. Repositório ECR com imagem da aplicação.
-2. Role com acesso ao ECS, CodeDeploy e ECR.
+2. Role IAM com acesso ao ECS, CodeDeploy, ECR e Secret Manager.
 3. Terraform instalado.
 4. Shell bash para execução do Terraform (uso de recursos `local`).
-
+5. OPCIONAL - Secret do Secret Manager com a API KEY do Datadog para envio do trace e logs.
 ---
 
 ## 📦 Como usar cada módulo
-
 ### 0. Altere a região
-
 Por padrão, está `us-east-1` para compatibilidade com a conta free-tier.
 
 ### 1. Adicione os módulos desejados
-
 ```hcl
 terraform {
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/application-load-balancer?ref=v2.0.0"
+  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/application-load-balancer?ref=v3.0.0"
 }
 ```
-
-Preencha o `variables.tfvars` com dados da sua conta, ou use `data` para busca dinâmica. Veja o diretório `example` para exemplos.
-
+Preencha o `variables.tfvars` com dados da sua conta, ou use `data` para busca dinâmica. Veja o diretório `infra/example` para exemplo de como inserir as informações dinamicamente.
 ### 2. Inicialize e aplique
 
 ```bash
@@ -136,34 +158,26 @@ terraform apply -var-file="inventories/variables.tfvars"
 ```
 
 ---
-
 ## 📌 Observações
-
 - Só pode haver **um listener por porta** no ALB.
 - A troca entre `blue` e `green` é gerenciada pelo **CodeDeploy**.
 - O listener padrão aponta inicialmente para o `blue`.
 - O `AppSpec` é gerado e excluído localmente após o deploy.
 - Um novo deploy ocorre via execução local do Terraform.
 - Módulos são independentes, mas exigem dependências previamente criadas. Em situações de reuso, garanta que a infraestrutura seja compatível.
-
+- Para usar o Datadog é necessário um Secret com a API KEY para que o agente faça o envio de trace e logs.
 ---
 
 ## ⌨️ Próximos passos
 
-#### ✅ v1.0.0 - Canary Blue/Green Deployment com ECS e CodeDeploy via Terraform
-#### ✅ v1.5.0  - Modularização na criação do Load Balancer, ECS Service e CodeDeploy
-#### ✅ v2.0.0 - Integração da aplicação Kotlin com API externa -> http://numbersapi.com/
+- [x] v1.0.0 - Canary Blue/Green Deployment com ECS e CodeDeploy via Terraform
+- [x] v1.5.0 - Modularização na criação do Load Balancer, ECS Service e CodeDeploy
+- [x]  v2.0.0 - Integração da aplicação Kotlin com API externa -> http://numbersapi.com/
+- [x]  v2.5.0 - Adição do Datadog APM e Datadog Logs
+- [ ]  v2.5.5 - Correções das variáveis e profile Spring
+- [ ]  v3.0.0 - Adição do Github Actions para criação da infraestrutura via pipeline
+- [ ]  vx.x.x - Migração de ECS Fargate para EKS Fargate
 
-### 🏷️ v2.5.0 - Monitoramento com Datadog APM
-- [ ] Criar secrets no Terraform
-- [ ] Adicionar `DD_API_KEYs` como env var
-- [ ] Criar role com políticas do Datadog (ECS)
-- [ ] Instrumentação do OpenTelemetry
-- [ ] Instrumentar ECS com Datadog
-- [ ] Validar ingestão de logs e APM
-- [ ] Taguear serviço ECS com Terraform
 ---
-
 ## ❌ Falhas ao executar?
-
-Abra uma **issue**! Correções e contricd buições são bem-vindas.
+Abra uma **issue**! Correções e contribuições são bem-vindas.
