@@ -10,7 +10,7 @@ variable "env_variables" {
 variable "service_name" {
   description = "Nome do Microsserviço ECS"
   type        = string
-  default     = "kotlin-canary"
+  default     = "demo-canary-kotlin"
 }
 
 variable "ecs_cluster_name" {
@@ -53,11 +53,11 @@ variable "subnet_id" {
 }
 
 variable "sg_default" {
-  default = "default"
+  default = "sg-default"
 }
 
 variable "uri_image" {
-  default = "hash-image-ecr"
+  default = "uri-image-ecr"
 }
 
 variable "target_group" {

@@ -32,6 +32,8 @@ module "ecs-service" {
 
   # Additional Configs in Task Definition
   env_variables      = []
+
+  # Enable Datadog in Task Definition
   enable_datadog     = true
 }
 
@@ -50,6 +52,5 @@ module "code-deploy" {
   #Strategy Canary
   role_codedeploy          = data.aws_iam_role.this.arn
   deployment_config_canary = "CodeDeployDefault.ECSCanary10Percent5Minutes"
-
 }
 
