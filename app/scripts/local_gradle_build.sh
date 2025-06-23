@@ -15,11 +15,9 @@ echo "Buildando imagem Docker..."
 docker build -t $APP_NAME .
 
 # Para integrar o build ao repositório ECR
-./scripts/local_pull_ecr.sh $APP_NAME
-echo "Iniciando upload para o repositório ECR..."
-clear
-cd
+#./scripts/local_pull_ecr.sh $APP_NAME
+#echo "Iniciando upload para o repositório ECR..."
 
 # Para execução local
-# echo "Executando container..."
-# docker run -it $APP_NAME
+echo "Executando container..."
+docker run -it $APP_NAME

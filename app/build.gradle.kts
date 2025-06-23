@@ -14,14 +14,13 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("com.datadoghq:dd-trace-api:1.+")
-}
+    implementation("io.opentelemetry:opentelemetry-api:1.34.1")
+    implementation("io.opentelemetry:opentelemetry-context:1.34.1")}
 
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {

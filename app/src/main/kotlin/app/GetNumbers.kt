@@ -19,7 +19,7 @@ class NumbersApiService {
             val response = restTemplate.getForObject(url, String::class.java)
             response?.let { objectMapper.readValue<NumberFact>(it) }
         } catch (e: Exception) {
-            logger.error("COLAPSE: ${e.message}", e)
+            logger.error("Erro ao buscar dado da API Numbers: ${e.message}", e)
             System.exit(1)
             return null
         }
