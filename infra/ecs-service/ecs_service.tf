@@ -38,9 +38,4 @@ resource "aws_ecs_service" "this" {
     container_port   = var.port_application
   }
 
-  lifecycle {
-    replace_triggered_by  = [
-      aws_ecs_task_definition.this.arn
-    ]
-  }
 }
