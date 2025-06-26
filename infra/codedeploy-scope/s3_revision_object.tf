@@ -7,7 +7,7 @@ resource "aws_s3_object" "this" {
 
   bucket = aws_s3_bucket.this.bucket
   key    = "appspec.yaml"
-  source = "${path.module}/appspec_template/appspec.yaml"
+  source = local_file.this
   acl    = "private"
 
   triggers = {
