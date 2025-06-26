@@ -5,10 +5,6 @@ data "template_file" "this" {
     CONTAINER_NAME      = local.container_name
     CONTAINER_PORT      = var.port_application
   }
-  
-  triggers = {
-    always_run = timestamp()
-  }
 }
 
 resource "local_file" "this" {
