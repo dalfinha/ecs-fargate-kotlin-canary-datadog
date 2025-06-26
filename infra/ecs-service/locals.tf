@@ -87,6 +87,13 @@ locals {
         protocol      = "tcp"
       }
     ]
+    healthCheck = {
+      command     = ["CMD-SHELL", "curl -f http://localhost:8126/info || exit 1"]
+      interval    = 30
+      timeout     = 5
+      retries     = 3
+      startPeriod = 10
+    }
     logConfiguration = {
       logDriver = "awslogs"
       options = {
