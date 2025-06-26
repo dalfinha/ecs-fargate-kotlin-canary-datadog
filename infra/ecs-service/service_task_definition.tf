@@ -7,8 +7,8 @@ resource "aws_ecs_task_definition" "this" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 
-  cpu    = var.enable_datadog ? "512" : "256"
-  memory = var.enable_datadog ? "1024" : "512"
+  cpu    = local.total_cpu
+  memory = local.total_memory
 
   runtime_platform {
     cpu_architecture        = "X86_64"
@@ -21,8 +21,8 @@ resource "aws_ecs_task_definition" "this" {
         {
           name  = "container-${var.service_name}"
           image = var.uri_image
-          cpu   = var.enable_datadog ? 384 : 256
-          memory = 512
+          cpu    = local.div_task_resource.app.cpu
+          memory = local.div_task_resource.app.memory
           portMappings = [
             {
               name          = "container-${var.service_name}-${var.port_application}-tcp"

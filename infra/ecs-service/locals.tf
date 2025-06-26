@@ -4,6 +4,22 @@ locals {
   container_definition = jsondecode(aws_ecs_task_definition.this.container_definitions)
   container_name = local.container_definition[0].name
 
+  total_cpu    = var.enable_datadog ? 512  : 256
+  total_memory = var.enable_datadog ? 1024 : 512
+
+  percent_task_config = {
+    app     = var.enable_datadog ? 80 : 100
+    dd_logs = 10
+    dd_apm  = 10
+  }
+
+  div_task_resource = { for k, v in local.percent_task_config :
+    k => {
+      cpu    = floor(local.total_cpu * v / 100)
+      memory = floor(local.total_memory * v / 100)
+    }
+  }
+
   dd_version = split("@", var.uri_image)[1]
 
   dd_variables = concat(var.env_variables, [
@@ -44,6 +60,7 @@ locals {
        value = "127.0.0.1"
     }
   ])
+
   dd_api_key = var.enable_datadog ? data.aws_secretsmanager_secret.datadog.arn : null
 
   cloudwatch_logs = {
@@ -77,8 +94,8 @@ locals {
   dd_apm_configure  = {
     name      = "datadog-apm"
     image     = "public.ecr.aws/datadog/agent:latest"
-    cpu       = 64
-    memory    = 256
+    cpu       = local.div_task_resource.dd_apm.cpu
+    memory    = local.div_task_resource.dd_apm.memory
     essential = false
     environment = local.dd_variables
     portMappings = [
@@ -112,8 +129,8 @@ locals {
   dd_logs_configure = {
     name      = "datadog-fluentbit"
     image     = "public.ecr.aws/aws-observability/aws-for-fluent-bit:latest"
-    cpu       = 64
-    memory    = 256
+    cpu       = local.div_task_resource.dd_logs.cpu
+    memory    = local.div_task_resource.dd_logs.memory
     essential = false
     environment = local.dd_variables
     healthCheck = {
