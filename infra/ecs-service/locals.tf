@@ -116,13 +116,19 @@ locals {
     memory    = 256
     essential = false
     environment = local.dd_variables
+    healthCheck = {
+      command = ["CMD-SHELL", "pgrep fluent-bit || exit 1"]
+      interval = 30
+      timeout = 5
+      retries = 3
+      startPeriod = 10
+    }
     firelensConfiguration = {
       type = "fluentbit"
       options = {
         "enable-ecs-log-metadata" = "true"
       }
     }
-
     logConfiguration = {
       logDriver = "awslogs"
       options = {
