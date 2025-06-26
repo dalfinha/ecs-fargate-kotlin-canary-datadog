@@ -8,9 +8,9 @@ locals {
   total_memory = var.enable_datadog ? 1024 : 512
 
   percent_task_config = {
-    app     = var.enable_datadog ? 80 : 100
-    dd_logs = 10
-    dd_apm  = 10
+    app     = var.enable_datadog ? 70 : 100
+    dd_logs = 15
+    dd_apm  = 15
   }
 
   div_task_resource = { for k, v in local.percent_task_config :
