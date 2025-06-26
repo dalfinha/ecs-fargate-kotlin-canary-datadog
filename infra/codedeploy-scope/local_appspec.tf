@@ -8,7 +8,14 @@ data "template_file" "this" {
 }
 
 resource "local_file" "this" {
+  depends_on = [null_resource.create_new_appspec]
+
   content  = data.template_file.this.rendered
   filename = "${path.module}/appspec_template/appspec.yaml"
 }
 
+resource "null_resource" "create_new_appspec" {
+  triggers = {
+    always_run = timestamp()
+  }
+}
