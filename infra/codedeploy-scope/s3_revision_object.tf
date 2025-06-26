@@ -9,8 +9,4 @@ resource "aws_s3_object" "this" {
   key    = "appspec.yaml"
   source = local_file.this
   acl    = "private"
-
-  triggers = {
-    always_run = timestamp()
-  }
 }
