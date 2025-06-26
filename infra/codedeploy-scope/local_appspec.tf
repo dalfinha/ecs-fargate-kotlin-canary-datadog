@@ -10,9 +10,5 @@ data "template_file" "this" {
 resource "local_file" "this" {
   content  = data.template_file.this.rendered
   filename = "${path.module}/appspec_template/appspec.yaml"
-
-  triggers = {
-    always_run = timestamp()
-  }
 }
 
