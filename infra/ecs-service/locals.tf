@@ -7,18 +7,31 @@ locals {
   total_cpu    = var.enable_datadog ? 512  : 256
   total_memory = var.enable_datadog ? 1024 : 512
 
-  percent_task_config = {
-    app     = var.enable_datadog ? 70 : 100
-    dd_logs = 15
-    dd_apm  = 15
+  default_app_cpu    = 256
+  default_app_memory = 512
+
+  left_over_cpu    = local.total_cpu    - local.default_app_cpu
+  left_over_memory = local.total_memory - local.default_app_memory
+
+  sidecar_weights = {
+    dd_logs = 50
+    dd_apm  = 50
   }
 
-  div_task_resource = { for k, v in local.percent_task_config :
-    k => {
-      cpu    = floor(local.total_cpu * v / 100)
-      memory = floor(local.total_memory * v / 100)
+  div_task_resource = merge(
+    {
+      app = {
+        cpu    = local.default_app_cpu
+        memory = local.default_app_memory
+      }
+    },
+    { for k, v in local.sidecar_weights :
+      k => {
+      cpu    = floor(local.left_over_cpu * v / 100)
+      memory = floor(local.left_over_memory * v / 100)
     }
-  }
+    }
+  )
 
   dd_version = split("@", var.uri_image)[1]
 

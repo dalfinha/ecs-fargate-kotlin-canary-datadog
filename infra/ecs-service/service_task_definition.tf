@@ -21,8 +21,8 @@ resource "aws_ecs_task_definition" "this" {
         {
           name  = "container-${var.service_name}"
           image = var.uri_image
-          cpu    = local.div_task_resource.app.cpu
-          memory = local.div_task_resource.app.memory
+          cpu    = local.default_app_cpu
+          memory = local.default_app_memory
           portMappings = [
             {
               name          = "container-${var.service_name}-${var.port_application}-tcp"
