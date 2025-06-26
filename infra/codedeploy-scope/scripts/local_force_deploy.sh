@@ -26,6 +26,6 @@ DEPLOYMENT_ID=$(aws deploy create-deployment \
 echo -e "\033[1;32mID do deployment: $DEPLOYMENT_ID\033[0m"
 
 rm -rf ./codedeploy/appspec.yaml
-aws s3 rm s3://$S3_APPSPEC/appspec.yaml
+#aws s3 rm s3://$S3_APPSPEC/appspec.yaml
 
 
