@@ -1,4 +1,4 @@
-output "target_group_name_list" {
+output "target_group_blue_green" {
   value = {
     for tg_key, tg in aws_lb_target_group.this :
     tg_key => tg.name
@@ -7,6 +7,10 @@ output "target_group_name_list" {
 
 output "port_application" {
   value = var.port_application
+}
+
+output "listener_protocol" {
+  value = aws_lb_listener.this.protocol
 }
 
 output "application_load_balancer_arn" {
@@ -18,5 +22,5 @@ output "application_load_balancer_name" {
 }
 
 output "security_group" {
-  value = var.sg_default
+  value = tolist(var.sg_default)[0]
 }
