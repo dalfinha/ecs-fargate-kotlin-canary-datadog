@@ -8,8 +8,12 @@ data "aws_secretsmanager_secret" "datadog" {
   name = "datadog-agent"
 }
 
+data "aws_lb" "alb" {
+  arn = data.aws_lb_target_group.current.load_balancer_arns[0]
+}
+
 data "aws_lb_listener" "current" {
-  load_balancer_arn = tolist(data.aws_lb_target_group.current.load_balancer_arns)[0]
+  load_balancer_arn = data.aws_lb.alb.arn
   port              = var.port_application
 }
 
