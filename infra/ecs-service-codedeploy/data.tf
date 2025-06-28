@@ -9,7 +9,7 @@ data "aws_secretsmanager_secret" "datadog" {
 }
 
 data "aws_lb" "alb" {
-  arn = data.aws_lb_target_group.current.load_balancer_arns[0]
+  name = "alb-${var.service_name}"
 }
 
 data "aws_lb_listener" "current" {
