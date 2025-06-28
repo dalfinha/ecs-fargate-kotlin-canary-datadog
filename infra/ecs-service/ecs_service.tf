@@ -9,7 +9,7 @@ resource "aws_ecs_service" "this" {
   enable_ecs_managed_tags      = true
   health_check_grace_period_seconds = 60
 
-  task_definition = aws_ecs_task_definition.this.arn
+  task_definition = var.deployment_controller_type == "CODE_DEPLOY" ? aws_ecs_task_definition.this.arn : null
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
@@ -36,10 +36,6 @@ resource "aws_ecs_service" "this" {
     target_group_arn = data.aws_lb_target_group.current.arn
     container_name   = "container-${var.service_name}"
     container_port   = var.port_application
-  }
-
-  lifecycle {
-    ignore_changes = [task_definition]
   }
 
 }
