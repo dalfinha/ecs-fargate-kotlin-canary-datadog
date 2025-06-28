@@ -9,7 +9,7 @@ data "aws_secretsmanager_secret" "datadog" {
 }
 
 data "aws_lb_listener" "current" {
-  load_balancer_arn = tolist(data.aws_lb_target_group.blue.load_balancer_arns)[0]
+  load_balancer_arn = var.target_group
   port              = var.port_application
 }
 
