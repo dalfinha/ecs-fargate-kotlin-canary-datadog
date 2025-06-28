@@ -14,7 +14,7 @@ output "container_name" {
   value = local.container_definition
 }
 
-output "task_definition_acctual" {
+output "task_definition_actual" {
   value = aws_ecs_task_definition.this.id
 }
 
