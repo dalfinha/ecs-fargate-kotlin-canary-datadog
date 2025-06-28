@@ -1,7 +1,7 @@
 locals {
   max_capacity_scaling = aws_ecs_service.this.desired_count * 3
 
-  target_group = replace(basename(var.target_group["blue"]), "-blue", "")
+  target_group = replace(var.target_group, "-blue", "")
 
   container_definition = jsondecode(aws_ecs_task_definition.this.container_definitions)
   container_name = local.container_definition[0].name
