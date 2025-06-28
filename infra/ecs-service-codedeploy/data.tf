@@ -1,7 +1,7 @@
 data "aws_region" "current" {}
 
 data "aws_lb_target_group" "current" {
-  name = var.target_group
+  name = local.target_group
 }
 
 data "aws_secretsmanager_secret" "datadog" {
@@ -14,9 +14,9 @@ data "aws_lb_listener" "current" {
 }
 
 data "aws_lb_target_group" "blue" {
-  name = "${var.target_group}-blue"
+  name = "${local.target_group}-blue"
 }
 
 data "aws_lb_target_group" "green" {
-  name = "${var.target_group}-green"
+  name = "${local.target_group}-green"
 }
