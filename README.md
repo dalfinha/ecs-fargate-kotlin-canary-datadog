@@ -169,13 +169,12 @@ terraform apply -var-file="inventories/variables.tfvars"
 - Para usar o Datadog é necessário um Secret com a API KEY para que o agente faça o envio de trace e logs.
 ---
 
-## ⌨️ Próximos passos
+## ⌨️ Histórico (Tags)
 
 - [x] v1.0.0 - Canary Blue/Green Deployment com ECS e CodeDeploy via Terraform
 - [x] v1.5.0 - Modularização na criação do Load Balancer, ECS Service e CodeDeploy
 - [x]  v2.0.0 - Integração da aplicação Kotlin com API externa -> http://numbersapi.com/
 - [x]  v2.5.0 - Adição do Datadog APM e Datadog Logs
-- [ ]  v2.5.5 - Correções das variáveis e profile Spring
 - [ ]  v3.0.0 - Adição do Github Actions para criação da infraestrutura via pipeline
 - [ ]  vx.x.x - Migração de ECS Fargate para EKS Fargate
 
