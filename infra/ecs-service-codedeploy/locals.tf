@@ -40,7 +40,13 @@ locals {
 
   dd_version = split("@", data.aws_ecr_image.this.image_uri)[1]
 
-  dd_variables = concat(var.env_variables, [
+  dd_variables = concat([
+      for key, value in var.env_variables :
+    {
+      name  = key
+      value = value
+    }
+  ], [
     {
       name  = "ECS_FARGATE",
       value = "true"

@@ -4,11 +4,8 @@ variable "ecs_cluster_name" {
 
 variable "env_variables" {
   description = "Variaveis de ambiente associadas ao container"
-  type = list(object({
-    key   = string
-    value = string
-  }))
-  default = []
+  type        = map(string)
+  default = {}
 }
 
 variable "env" {

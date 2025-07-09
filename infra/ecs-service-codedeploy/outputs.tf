@@ -11,7 +11,7 @@ output "cluster_arn" {
 }
 
 output "container_name" {
-  value = local.container_definition
+  value = local.container_name
 }
 
 output "task_definition_actual" {

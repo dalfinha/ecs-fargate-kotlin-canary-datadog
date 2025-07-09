@@ -1,7 +1,7 @@
 resource "aws_ecs_task_definition" "this" {
   depends_on = [aws_ecs_cluster.this]
 
-  family                   = "family-${var.service_name}-${local.task_suffix}"
+  family                   = "family-${var.service_name}"
   task_role_arn            = data.aws_iam_role.task_role.arn
   execution_role_arn       = data.aws_iam_role.execution_role.arn
   network_mode             = "awsvpc"
@@ -40,15 +40,13 @@ resource "aws_ecs_task_definition" "this" {
             startPeriod = 10
           }
           essential   = true
-          environment = concat(
-            [
-              for env in var.env_variables : {
-              name  = env.key
-              value = env.value
-              }
-            ],
-             var.enable_datadog ? local.dd_variables : []
-          )
+          environment = [
+              for key, value in var.env_variables : {
+              name  = key
+              value = value
+            }
+          ]
+          #,var.enable_datadog ? local.dd_variables : []
           logConfiguration = var.enable_datadog ? local.fluentbit : local.cloudwatch_logs
         }
       ],
@@ -56,7 +54,4 @@ resource "aws_ecs_task_definition" "this" {
         var.enable_datadog ? [local.dd_logs_configure]: []
     )
   )
-  lifecycle {
-    prevent_destroy = true
-  }
 }

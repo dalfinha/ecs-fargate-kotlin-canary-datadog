@@ -17,9 +17,7 @@ else
     echo "Sem deploy em andamento. Iniciando novo deployment..."
 fi
 
-aws s3 cp ./codedeploy/appspec.yaml s3://$S3_APPSPEC/appspec.yaml
-
-sleep 15
+aws s3 cp ./appspec_template/appspec.yaml s3://$S3_APPSPEC/appspec.yaml
 
 DEPLOYMENT_ID=$(aws deploy create-deployment \
   --application-name $APPLICATION_NAME \
@@ -29,5 +27,4 @@ DEPLOYMENT_ID=$(aws deploy create-deployment \
 
 echo -e "\033[1;32mID do deployment: $DEPLOYMENT_ID\033[0m"
 
-rm -rf ./codedeploy/appspec.yaml
-#aws s3 rm s3://$S3_APPSPEC/appspec.yaml
+rm -rf ./appspec_template/appspec.yaml

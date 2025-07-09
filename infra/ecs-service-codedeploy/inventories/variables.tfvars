@@ -8,7 +8,7 @@ role_execution = "ecs-tasks-demo"
 ecs_cluster_name = "ecs-kotlin-canary"
 
 ecr_repository   = "demo-spring-app"
-env_variables    = []
+env_variables    = {}
 
 target_group = "canary-blue"
 
