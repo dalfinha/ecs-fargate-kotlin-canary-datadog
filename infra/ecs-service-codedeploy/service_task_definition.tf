@@ -1,9 +1,9 @@
 resource "aws_ecs_task_definition" "this" {
   depends_on = [aws_ecs_cluster.this]
 
-  family                   = "family-${var.service_name}"
-  task_role_arn            = var.role_task_arn
-  execution_role_arn       = var.role_execution_arn
+  family                   = "family-${var.service_name}-${local.task_suffix}"
+  task_role_arn            = data.aws_iam_role.task_role.arn
+  execution_role_arn       = data.aws_iam_role.execution_role.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
 
@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "this" {
       [
         {
           name  = "container-${var.service_name}"
-          image = var.uri_image
+          image = data.aws_ecr_image.this.image_uri
           cpu    = local.default_app_cpu
           memory = local.default_app_memory
           portMappings = [
@@ -56,4 +56,8 @@ resource "aws_ecs_task_definition" "this" {
         var.enable_datadog ? [local.dd_logs_configure]: []
     )
   )
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes        = [family]
+  }
 }

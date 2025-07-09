@@ -1,7 +1,10 @@
 locals {
   max_capacity_scaling = aws_ecs_service.this.desired_count * 3
 
+  task_suffix = substr(md5(1), 0, 6)
+
   target_group = replace(var.target_group, "-blue", "")
+  force_trigger_appspec = timestamp()
 
   container_definition = jsondecode(aws_ecs_task_definition.this.container_definitions)
   container_name = local.container_definition[0].name
@@ -35,7 +38,7 @@ locals {
     }
   )
 
-  dd_version = split("@", var.uri_image)[1]
+  dd_version = split("@", data.aws_ecr_image.this.image_uri)[1]
 
   dd_variables = concat(var.env_variables, [
     {
@@ -144,7 +147,7 @@ locals {
   }
 
   dd_logs_configure = {
-    name      = "datadog-fluentbit"
+    name      = "datadog-logs-fluentbit"
     image     = "public.ecr.aws/aws-observability/aws-for-fluent-bit:latest"
     cpu       = local.div_task_resource.dd_logs.cpu
     memory    = local.div_task_resource.dd_logs.memory

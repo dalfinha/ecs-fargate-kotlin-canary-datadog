@@ -20,11 +20,11 @@ variable "service_name" {
   description = "Nome do Serviço ECS Fargate"
 }
 
-variable "role_task_arn" {
+variable "role_task" {
   description = "Role IAM com permissão para Task"
 }
 
-variable "role_execution_arn" {
+variable "role_execution" {
   description = "Role IAM para permissão de Execução"
 }
 
@@ -47,10 +47,6 @@ variable "sg_default" {
   description = "Security Group da Aplicação"
 }
 
-variable "uri_image" {
-  description = "Imagem ECR para execução do Container (URI)"
-}
-
 variable "target_group" {
   description = "Nome do Target Group que será associado ao serviço. OBS: Não adicionar o -blue ou -green"
 }
@@ -58,10 +54,14 @@ variable "target_group" {
 variable "enable_datadog" {
   description = "Habilita o uso do Datadog Logs e APM na aplicação"
   type    = bool
-  default = false
+  default = true
 }
 
 variable "deployment_config_canary" {
   description = "Estratégia de Canary associada a aplicação"
-  default = "CodeDeployDefault.ECSCanary10Percent5Minutes"
+  default = "CodeDeployDefault.ECSAllAtOnce"
+}
+
+variable "ecr_repository" {
+  type  = string
 }

@@ -3,7 +3,7 @@ resource "aws_codedeploy_deployment_group" "this" {
   app_name               = aws_codedeploy_app.this.name
   deployment_config_name = var.deployment_config_canary
   deployment_group_name  = aws_codedeploy_app.this.name
-  service_role_arn       = aws_ecs_service.this.iam_role
+  service_role_arn       = data.aws_iam_role.execution_role.arn
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
@@ -46,5 +46,4 @@ resource "aws_codedeploy_deployment_group" "this" {
       }
     }
   }
-
 }

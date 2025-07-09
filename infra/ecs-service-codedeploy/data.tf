@@ -20,3 +20,19 @@ data "aws_lb_target_group" "blue" {
 data "aws_lb_target_group" "green" {
   name = "${local.target_group}-green"
 }
+
+data "aws_ecr_image" "this" {
+  repository_name = var.ecr_repository
+  most_recent     = true
+}
+
+
+data "aws_iam_role" "task_role" {
+  name = var.role_task
+}
+
+data "aws_iam_role" "execution_role" {
+  name = var.role_execution
+}
+
+

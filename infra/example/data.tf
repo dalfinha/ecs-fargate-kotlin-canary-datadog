@@ -9,6 +9,10 @@ data "aws_ecr_image" "this" {
   most_recent     = true
 }
 
+data "aws_ecr_repository" "this" {
+  name = var.ecr_repository
+}
+
 data "aws_vpc" "this" {
   default = true
 }

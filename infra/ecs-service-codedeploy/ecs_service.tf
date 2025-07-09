@@ -28,7 +28,7 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     subnets          = var.subnet_id
-    security_groups  = [var.sg_default]
+    security_groups  = var.sg_default
     assign_public_ip = true
   }
 
@@ -38,4 +38,7 @@ resource "aws_ecs_service" "this" {
     container_port   = var.port_application
   }
 
+  lifecycle {
+    ignore_changes = [task_definition, load_balancer]
+  }
 }

@@ -1,31 +1,27 @@
 output "service_name" {
-  value = module.ecs-service.service_name
-}
-
-output "container_configs" {
-  value = module.ecs-service.container_name
-}
-
-output "last_image_ecr" {
-  value = data.aws_ecr_image.this.image_uri
+  value = module.ecs-service-codedeploy.service_name
 }
 
 output "alb_name" {
   value = module.alb.application_load_balancer_name
 }
 
+output "datadog" {
+  value = module.ecs-service-codedeploy.datadog
+}
+
+output "version_application_image" {
+  value = data.aws_ecr_repository.this.most_recent_image_tags[0]
+}
+
 output "codedeploy_application" {
-  value = module.code-deploy.application_name_codedeploy
+  value = module.ecs-service-codedeploy.application_name_codedeploy
 }
 
 output "s3_appspec" {
-  value = module.code-deploy.s3_bucket
+  value = module.ecs-service-codedeploy.s3_bucket
 }
 
-output "codedeploy-config-strategy" {
-  value = module.code-deploy.deploy_strategy
-}
-
-output "datadog" {
-  value = module.ecs-service.datadog
+output "codedeploy_config_strategy" {
+  value = module.ecs-service-codedeploy.deploy_strategy
 }

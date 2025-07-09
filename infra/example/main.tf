@@ -1,5 +1,5 @@
 module "alb" {
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/application-load-balancer?ref=v2.0.0"
+  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/application-load-balancer?ref=feature/secrets"
 
   #ALB
   scope      = var.service_name
@@ -12,11 +12,12 @@ module "alb" {
   vpc_id            = data.aws_vpc.this.id
 }
 
-module "ecs-service" {
+module "ecs-service-codedeploy" {
   depends_on = [ module.alb ]
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/ecs-service?ref=feature/secrets"
+  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/ecs-service-codedeploy?ref=feature/secrets"
 
   env    = "dev"
+
   # Service Config
   ecs_cluster_name   = var.ecs_cluster_name
   service_name       = var.service_name
@@ -27,30 +28,12 @@ module "ecs-service" {
   port_application   = module.alb.port_application
   subnet_id          = data.aws_subnets.this.ids
   sg_default         = data.aws_security_group.this.id
-  uri_image          = data.aws_ecr_image.this.image_uri
+  ecr_repository     = data.aws_ecr_image.this.image_uri
   target_group       = module.alb.target_group_name_list["blue"]
 
   # Additional Configs in Task Definition
   env_variables      = []
 
   # Enable Datadog in Task Definition
-  enable_datadog     = true
+  enable_datadog     = false
 }
-
-
-module "code-deploy" {
-  depends_on = [ module.ecs-service ]
-  source = "git::https://github.com/dalfinha/ecs-fargate-kotlin-canary-datadog.git//infra/codedeploy-scope?ref=v2.0.0"
-
-  # Config Service
-  cluster_name             = module.ecs-service.cluster_name
-  cluster_arn              = module.ecs-service.cluster_arn
-  service_name             = module.ecs-service.service_name
-  target_group             = "canary"
-  port_application         = module.alb.port_application
-
-  #Strategy Canary
-  role_codedeploy          = data.aws_iam_role.this.arn
-  deployment_config_canary = "CodeDeployDefault.ECSCanary10Percent5Minutes"
-}
-
