@@ -1,10 +1,7 @@
 variable "env_variables" {
-  description = "Variaveis de ambiente para a task definition"
-  type = list(object({
-    key   = string
-    value = string
-  }))
-  default = []
+  description = "Variaveis de ambiente associadas ao container"
+  type        = map(string)
+  default = {}
 }
 
 variable "service_name" {

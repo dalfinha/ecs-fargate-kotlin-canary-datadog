@@ -27,3 +27,4 @@ variable "target_group_name" {
     description = "Nome do Target Group (blue e green)"
     default = "canary"
 }
+

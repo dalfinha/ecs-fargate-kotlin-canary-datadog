@@ -9,3 +9,11 @@ output "s3_bucket" {
 output "deploy_strategy" {
   value = aws_codedeploy_deployment_group.this.deployment_config_name
 }
+
+output "aaa" {
+  value = local.load_balancer_arn
+}
+
+output "aaaaa" {
+  value = data.aws_lb_listener.current.arn
+}

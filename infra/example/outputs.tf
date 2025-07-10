@@ -1,5 +1,5 @@
 output "service_name" {
-  value = module.ecs-service-codedeploy.service_name
+  value = module.ecs-service.service_name
 }
 
 output "alb_name" {
@@ -7,7 +7,7 @@ output "alb_name" {
 }
 
 output "datadog" {
-  value = module.ecs-service-codedeploy.datadog
+  value = module.ecs-service.datadog
 }
 
 output "version_application_image" {
@@ -15,13 +15,13 @@ output "version_application_image" {
 }
 
 output "codedeploy_application" {
-  value = module.ecs-service-codedeploy.application_name_codedeploy
+  value = module.codedeploy.application_name_codedeploy
 }
 
 output "s3_appspec" {
-  value = module.ecs-service-codedeploy.s3_bucket
+  value = module.codedeploy.s3_bucket
 }
 
 output "codedeploy_config_strategy" {
-  value = module.ecs-service-codedeploy.deploy_strategy
+  value = module.codedeploy.deploy_strategy
 }
