@@ -6,9 +6,8 @@ locals {
 
   target_group = replace(var.target_group, "-blue", "")
 
-  load_balancer_arn = (
-    length(tolist(data.aws_lb_target_group.blue.load_balancer_arns)) > 0 ?
-    tolist(data.aws_lb_target_group.blue.load_balancer_arns)[0] :
+  load_balancer_arn = try(
+    tolist(data.aws_lb_target_group.blue.load_balancer_arns)[0],
     tolist(data.aws_lb_target_group.green.load_balancer_arns)[0]
   )
 }
