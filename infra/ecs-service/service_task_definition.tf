@@ -40,13 +40,15 @@ resource "aws_ecs_task_definition" "this" {
             startPeriod = 10
           }
           essential   = true
-          environment = [
+          environment = concat(
+            [
               for key, value in var.env_variables : {
               name  = key
               value = value
             }
-          ]
-          #,var.enable_datadog ? local.dd_variables : []
+            ],
+              var.enable_datadog ? local.dd_variables : []
+          )
           logConfiguration = var.enable_datadog ? local.fluentbit : local.cloudwatch_logs
         }
       ],

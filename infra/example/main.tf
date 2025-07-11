@@ -33,7 +33,7 @@ module "ecs-service" {
   # Additional Configs in Task Definition
   env_variables      = {}
 
-  enable_datadog     = true
+  enable_datadog     = false
 }
 
 module "codedeploy" {
