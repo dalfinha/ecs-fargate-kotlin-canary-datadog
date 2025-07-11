@@ -12,7 +12,7 @@ data "aws_ecs_service" "current" {
 }
 
 data "aws_lb_listener" "current" {
-  load_balancer_arn = local.load_balancer_arn
+  load_balancer_arn = tolist(data.aws_lb_target_group.blue.load_balancer_arns)[0]
   port              = var.port_application
 }
 
