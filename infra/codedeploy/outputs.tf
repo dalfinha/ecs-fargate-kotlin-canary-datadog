@@ -10,6 +10,10 @@ output "deploy_strategy" {
   value = aws_codedeploy_deployment_group.this.deployment_config_name
 }
 
+output "version_task_definition" {
+  value = data.aws_ecs_task_definition.current.arn
+}
+
 output "aaa" {
   value = local.load_balancer_arn
 }
