@@ -56,4 +56,5 @@ resource "aws_ecs_task_definition" "this" {
         var.enable_datadog ? [local.dd_logs_configure]: []
     )
   )
+  skip_destroy = true
 }
