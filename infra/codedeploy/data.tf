@@ -17,7 +17,7 @@ data "aws_lb_listener" "current" {
 }
 
 data "aws_ecs_task_definition" "current" {
-  task_definition = "family-${var.service_name}"
+  task_definition = data.aws_ecs_service.current.task_definition
 }
 
 data "aws_ecs_cluster" "current" {
