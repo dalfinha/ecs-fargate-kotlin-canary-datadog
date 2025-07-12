@@ -6,7 +6,6 @@ DEPLOYMENT_ID=$(aws deploy list-deployments --application-name $APPLICATION_NAME
 
 if [ "$DEPLOYMENT_ID" != "None" ]; then
     STATUS=$(aws deploy get-deployment --deployment-id $DEPLOYMENT_ID --query 'deploymentInfo.status' --output text)
-
     if [ "$STATUS" == "InProgress" ]; then
         echo "Já existe um deployment em andamento (ID: $DEPLOYMENT_ID). Um novo deployment não será iniciado."
         exit 0
@@ -27,4 +26,4 @@ DEPLOYMENT_ID=$(aws deploy create-deployment \
 
 echo -e "\033[1;32mID do deployment: $DEPLOYMENT_ID\033[0m"
 
-rm -rf ./appspec_template/appspec.yaml
+#rm -rf ./appspec_template/appspec.yaml
