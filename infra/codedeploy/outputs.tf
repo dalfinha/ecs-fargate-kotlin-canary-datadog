@@ -13,11 +13,3 @@ output "deploy_strategy" {
 output "version_task_definition" {
   value = data.aws_ecs_task_definition.current.arn
 }
-
-output "aaa" {
-  value = local.load_balancer_arn
-}
-
-output "aaaaa" {
-  value = data.aws_lb_listener.current.arn
-}
