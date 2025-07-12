@@ -7,9 +7,9 @@ resource "aws_ecs_service" "this" {
   launch_type                  = null
   scheduling_strategy          = "REPLICA"
   enable_ecs_managed_tags      = true
-  health_check_grace_period_seconds = 60
+  health_check_grace_period_seconds = 10
 
-  task_definition = var.deployment_controller_type == "CODE_DEPLOY" ? aws_ecs_task_definition.this.arn : null
+  task_definition = aws_ecs_task_definition.this.arn
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
@@ -28,7 +28,7 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     subnets          = var.subnet_id
-    security_groups  = [var.sg_default]
+    security_groups  = var.sg_default
     assign_public_ip = true
   }
 
@@ -36,5 +36,9 @@ resource "aws_ecs_service" "this" {
     target_group_arn = data.aws_lb_target_group.current.arn
     container_name   = "container-${var.service_name}"
     container_port   = var.port_application
+  }
+
+  lifecycle {
+    ignore_changes = [task_definition, load_balancer]
   }
 }

@@ -7,3 +7,5 @@ Resources:
         LoadBalancerInfo:
           ContainerName: "${CONTAINER_NAME}"
           ContainerPort: "${CONTAINER_PORT}"
+
+# Trigger: ${TRIGGER}
