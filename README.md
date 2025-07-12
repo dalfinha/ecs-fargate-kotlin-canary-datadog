@@ -2,34 +2,39 @@
 
 ## 🏷️ v2.5.0 - Adição do Datadog Logs e Datadog APM no container da aplicação. 
 
-Este projeto provisiona uma infraestrutura no Terraform pronta para realizar deployments com estratégia blue/green em serviços ECS Fargate, utilizando AWS CodeDeploy. Agora, dividido em módulos, é possível criar apenas os componentes que desejar, como apenas o CodeDeploy ou apenas o Application Load Balancer. Nessa nova versão, agora é possível utilizar o Datadog para envio de Logs e Trace da aplicação de forma automática, utilizando a variável `enable_datadog = true`.
+Este projeto provisiona uma infraestrutura em Terraform pronta para realizar deployments com estratégia *blue/green* em serviços ECS Fargate, utilizando o AWS CodeDeploy. Agora, dividido em módulos, é possível criar apenas os componentes desejados, como apenas o CodeDeploy ou apenas o Application Load Balancer. Nesta nova versão, também é possível utilizar o Datadog para envio automático de logs e traces da aplicação, bastando definir a variável `enable_datadog = true` e ter um Secret do Secret Manager com os valores da API KEY.
 
-A pasta /app contém uma aplicação básica em Kotlin com SPRING para testar o rollout e rollback do Canary. A aplicação obtém dois números aleatórios, soma o número e consulta informações de uma trivia através da API Numbers. Os logs agora incluem payloads estruturados compatíveis com o Datadog APM e Datadog Logs. 
+A pasta /app contém uma aplicação básica em Kotlin com SPRING para testar o rollout e rollback do Canary. A aplicação obtém dois números aleatórios, soma o número e consulta informações de uma trivia através da [API Numbers](http://numbersapi.com/). Os logs agora incluem payloads estruturados. 
 
 ---
 ### 🌀 Dependências 
 ```mermaid
 flowchart TD
+    subgraph Entrypoint
+        ALB[Application Load Balancer]
+    end
+
     subgraph ECS Cluster
         ECS[ECS Fargate]
         Service[ECS Service]
         ECS --> Service
+        Service -->|Logs e APM| Datadog[(Datadog)]
     end
 
-    Service --> TGBlue[Target Group Blue]
-    Service --> TGGreen[Target Group Green]
+    subgraph CodeDeploy Stack
+        CodeDeploy[AWS CodeDeploy]
+        S3["S3: AppSpec e revisões"]
+        CodeDeploy --> S3
+    end
 
-    ALB[Application Load Balancer] -->|Roteia tráfego| TGBlue
-    ALB -->|Roteia tráfego| TGGreen
+    ALB --> TGBlue[Target Group Blue]
+    ALB --> TGGreen[Target Group Green]
 
-    Service -->|Logs e APM| Datadog[(Datadog)]
-
-    CodeDeploy[AWS CodeDeploy]
-    S3["S3: AppSpec e revisões"]
+    Service --> TGBlue
+    Service --> TGGreen
 
     TGBlue --> CodeDeploy
     TGGreen --> CodeDeploy
-    CodeDeploy --> S3
 ```
 
 > [!TIP] 
@@ -63,9 +68,10 @@ flowchart TD
 
 ```
 ./app
-└──scripts
-   ├── local_pull_ecr.sh
-   └── local_gradle_build.sh
+└── scripts
+    ├── local_pull_ecr.sh
+    └── local_gradle_build.sh
+
 ./infra
 ├── application-load-balancer
 │   ├── application_load_balancer.tf
@@ -73,7 +79,8 @@ flowchart TD
 │   ├── outputs.tf
 │   ├── target_group.tf
 │   └── variables.tf
-├── codedeploy-scope
+│
+├── codedeploy
 │   ├── appspec_template
 │   │   └── appspec_sample_template.yaml
 │   ├── code_deploy_application.tf
@@ -87,6 +94,7 @@ flowchart TD
 │   ├── scripts
 │   │   └── local_force_deploy.sh
 │   └── variables.tf
+│
 ├── ecs-service
 │   ├── data.tf
 │   ├── ecs_cluster.tf
@@ -97,20 +105,20 @@ flowchart TD
 │   ├── service_autoscaling_target.tf
 │   ├── service_task_definition.tf
 │   └── variables.tf
+│
 └── example
     ├── data.tf
-    ├── inventories
-    │   └── variables.tfvars
     ├── main.tf
     ├── outputs.tf
     ├── providers.tf
     └── variables.tf
 ```
 ---
-## 📜 Scripts auxiliares (`/app/scripts`)
+## 📜 Scripts auxiliares (`./scripts`)
 
 - `local_gradle_build.sh`: Compila o projeto com Gradle, gera o JAR, cria a imagem Docker e chama o local_pull_ecr.sh para versionar e enviar a imagem ao ECR.
 - `local_pull_ecr.sh`: Autentica no ECR, busca a próxima versão disponível, cria uma nova tag baseada nela e faz o push da imagem Docker para o repositório.
+- `local_force_deploy.sh` : Verifica se há um deployment em andamento no AWS CodeDeploy e, se não houver, faz upload do appspec.yaml para o S3 e inicia um novo deployment, removendo o arquivo local após o envio.
 ---
 ## 🔧 Componentes Principais
 
@@ -129,7 +137,7 @@ flowchart TD
 2. Role IAM com acesso ao ECS, CodeDeploy, ECR e Secret Manager.
 3. Terraform instalado.
 4. Shell bash para execução do Terraform (uso de recursos `local`).
-5. OPCIONAL - Secret do Secret Manager com a API KEY do Datadog para envio do trace e logs.
+5. Secret do Secret Manager com a API KEY do Datadog para envio do trace e logs.
 ---
 
 ## 📦 Como usar cada módulo
@@ -155,7 +163,7 @@ terraform apply -var-file="variables.tfvars"
 Ou:
 
 ```bash
-terraform apply -var-file="inventories/variables.tfvars"
+terraform apply -var-file="variables.tfvars"
 ```
 
 ---
@@ -166,7 +174,8 @@ terraform apply -var-file="inventories/variables.tfvars"
 - O `AppSpec` é gerado e excluído localmente após o deploy.
 - Um novo deploy ocorre via execução local do Terraform.
 - Módulos são independentes, mas exigem dependências previamente criadas. Em situações de reuso, garanta que a infraestrutura seja compatível.
-- Para usar o Datadog é necessário um Secret com a API KEY para que o agente faça o envio de trace e logs.
+- Para usar o Datadog, é necessário um Secret no **AWS Secrets Manager** contendo a API Key, para que o agente envie traces e logs.
+- É imprescindível ter uma **IAM Role** com permissões para **Secrets Manager**, **ECS**, **Auto Scaling** e **CodeDeploy**.
 ---
 
 ## ⌨️ Histórico (Tags)
