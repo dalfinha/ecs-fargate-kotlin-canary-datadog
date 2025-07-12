@@ -57,4 +57,8 @@ resource "aws_ecs_task_definition" "this" {
     )
   )
   skip_destroy = true
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
