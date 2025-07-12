@@ -9,7 +9,7 @@ resource "aws_ecs_service" "this" {
   enable_ecs_managed_tags      = true
   health_check_grace_period_seconds = 60
 
-  task_definition = var.deployment_controller_type == "CODE_DEPLOY" ? aws_ecs_task_definition.this.arn : null
+  task_definition = aws_ecs_task_definition.this.arn
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
