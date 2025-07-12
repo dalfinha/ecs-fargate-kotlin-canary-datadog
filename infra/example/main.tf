@@ -31,9 +31,11 @@ module "ecs-service" {
   target_group       = module.alb.target_group_blue_green["blue"]
 
   # Additional Configs in Task Definition
-  env_variables      = {}
+  env_variables      = {
+    "made"  = "codedeploy_module"
+  }
 
-  enable_datadog     = false
+  enable_datadog     = true
 }
 
 module "codedeploy" {
@@ -46,7 +48,7 @@ module "codedeploy" {
   target_group             = "canary"
   port_application         = module.alb.port_application
 
-  #Strategy Canary
+  #Strategy Canary Deploy
   role_codedeploy_arn      = data.aws_iam_role.this.arn
   deployment_config_canary = "CodeDeployDefault.ECSAllAtOnce"
 }
