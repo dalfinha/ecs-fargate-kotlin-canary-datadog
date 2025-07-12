@@ -7,7 +7,7 @@ resource "aws_ecs_service" "this" {
   launch_type                  = null
   scheduling_strategy          = "REPLICA"
   enable_ecs_managed_tags      = true
-  health_check_grace_period_seconds = 60
+  health_check_grace_period_seconds = 10
 
   task_definition = aws_ecs_task_definition.this.arn
 
