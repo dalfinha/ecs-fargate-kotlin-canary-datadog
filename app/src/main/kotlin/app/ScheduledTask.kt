@@ -11,7 +11,7 @@ import net.logstash.logback.argument.StructuredArguments.keyValue
 @Component
 class ScheduledTask(private val numbersApiService: NumbersApiService) {
     private val logger = LoggerFactory.getLogger(ScheduledTask::class.java)
-    private val objectMapper = jacksonObjectMapper()
+    private val objectMapper = jacksonObjectMapper().apply { registerKotlinModule() }
 
     @Scheduled(fixedRate = 60000)
     fun generateRandomSum() {
@@ -20,9 +20,6 @@ class ScheduledTask(private val numbersApiService: NumbersApiService) {
         val sortSum = sortFirst + sortSecond
 
         val data = numbersApiService.getNumberFact(sortSum)
-
-        val payload = LogPayload(sortFirst, sortSecond, sortSum, data)
-        val jsonLog = objectMapper.writeValueAsString(payload)
 
         logger.info("sortNumbers: {}, {}, sum: {}, response: {}",
             keyValue("sortFirst", sortFirst),

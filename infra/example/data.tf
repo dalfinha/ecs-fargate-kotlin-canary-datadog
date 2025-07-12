@@ -9,6 +9,10 @@ data "aws_ecr_image" "this" {
   most_recent     = true
 }
 
+data "aws_ecr_repository" "this" {
+  name = var.ecr_repository
+}
+
 data "aws_vpc" "this" {
   default = true
 }
@@ -17,6 +21,7 @@ data "aws_security_group" "this" {
   name   = "default"
   vpc_id = data.aws_vpc.this.id
 }
+
 
 data "aws_subnets" "this" {
   filter {

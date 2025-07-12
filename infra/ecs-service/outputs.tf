@@ -11,9 +11,14 @@ output "cluster_arn" {
 }
 
 output "container_name" {
-  value = local.container_definition
+  value = local.container_name
 }
 
-output "task_definition_acctual" {
-  value = aws_ecs_task_definition.this.id
+output "task_definition_actual" {
+  value = aws_ecs_task_definition.this.arn
 }
+
+output "datadog" {
+  value = var.enable_datadog
+}
+

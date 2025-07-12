@@ -1,9 +1,9 @@
-variable "role_codedeploy" {
+variable "role_codedeploy_arn" {
   description = "Role IAM com permissoes para executar o CodeDeploy"
 }
 
 variable "deployment_config_canary" {
-  default = "CodeDeployDefault.ECSCanary10Percent5Minutes"
+  default = "CodeDeployDefault.ECSAllAtOnce"
 }
 
 variable "cluster_name" {
@@ -23,7 +23,7 @@ variable "cluster_arn" {
 
 variable "target_group" {
   description = "Nome do Target Group"
-  default = "seu-target-group"
+  default = "canary-target-gro"
 }
 
 variable "port_application" {

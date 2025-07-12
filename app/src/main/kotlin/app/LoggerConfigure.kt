@@ -1,15 +1,10 @@
 package app
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class NumberFact(
-    val text: String,
     val number: Int,
     val found: Boolean,
-    val type: String
-)
-
-data class LogPayload(
-    val sortFirst: Int,
-    val sortSecond: Int,
-    val sortSum: Int,
-    val data: NumberFact?
+    val type: String,
+    val text: String
 )

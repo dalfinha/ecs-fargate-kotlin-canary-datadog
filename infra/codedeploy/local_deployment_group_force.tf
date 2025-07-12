@@ -1,5 +1,5 @@
 resource "null_resource" "this" {
-  depends_on = [aws_codedeploy_deployment_group.this, aws_codedeploy_app.this]
+  depends_on = [aws_codedeploy_deployment_group.this, aws_codedeploy_app.this, aws_s3_object.this]
 
   provisioner "local-exec" {
     working_dir = path.module

@@ -1,65 +1,77 @@
 variable "env_variables" {
-  description = "Variaveis de ambiente para a task definition"
-  type = list(object({
-    key   = string
-    value = string
-  }))
-  default = []
+  type        = map(string)
+  description = "Variáveis de ambiente com chave e valor"
+  default     = {}
 }
 
 variable "service_name" {
-  description = "Nome do Microsserviço ECS"
   type        = string
-  default     = "kotlin-canary"
+  description = "Nome do serviço ECS"
+  default     = "demo-canary-kotlin"
 }
 
 variable "ecs_cluster_name" {
-  description = "Nome do Cluster ECS"
   type        = string
+  description = "Nome do cluster ECS"
   default     = "ecs-kotlin-canary"
 }
 
 variable "env" {
-  type = string
-  default = "dev"
+  type        = string
+  description = "Ambiente de implantação (ex: dev, prod)"
+  default     = "dev"
 }
 
 variable "ecr_repository" {
-  type  = string
-  default = "demo-spring-app"
+  type        = string
+  description = "Nome do repositório ECR para obter a imagem Docker"
+  default     = "demo-spring-app"
 }
 
 variable "role_iam" {
-  type = string
-  default = "ecs-tasks-demo"
+  type        = string
+  description = "Nome da role IAM com TODAS as roles necessárias para funcionamento dos módulos"
+  default     = "ecs-tasks-demo" # APENAS caso use de forma restrita e no data.tf
 }
 
-# Service
 variable "role_task_arn" {
-  default = "role-task-arn"
+  type        = string
+  description = "ARN da role atribuída à task ECS"
+  default     = "role-task-arn"
 }
 
 variable "role_execution_arn" {
-  default = "role-execution-arn"
+  type        = string
+  description = "ARN da role de execução do ECS"
+  default     = "role-execution-arn"
 }
 
 variable "port_application" {
-  default = 8080
+  type        = number
+  description = "Porta onde a aplicação escuta"
+  default     = 8080
 }
 
 variable "subnet_id" {
-  type = list(string)
-  default = []
+  type        = list(string)
+  description = "Lista de IDs das subnets para deploy"
+  default     = []
 }
 
 variable "sg_default" {
-  default = "default"
+  type        = string
+  description = "ID do grupo de segurança padrão"
+  default     = "sg-default"
 }
 
 variable "uri_image" {
-  default = "hash-image-ecr"
+  type        = string
+  description = "URI completa da imagem Docker no ECR"
+  default     = "uri-image-ecr"
 }
 
 variable "target_group" {
-  default = "target-group-default"
+  type        = string
+  description = "Nome do target group para balanceamento"
+  default     = "target-group-default"
 }
