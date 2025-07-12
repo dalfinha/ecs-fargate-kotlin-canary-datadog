@@ -11,8 +11,4 @@ data "template_file" "this" {
 resource "local_file" "this" {
   content  = data.template_file.this.rendered
   filename = "${path.module}/appspec_template/appspec.yaml"
-
-  triggers = {
-    task_definition_arn = data.aws_ecs_task_definition.current.arn
-  }
 }
